@@ -6,9 +6,5 @@
              xmlns:local="clr-namespace:CheckersWpfGrid"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
-    <UserControl.Template>
-        <ControlTemplate>
-            <Rectangle Fill="{Binding Color, RelativeSource={RelativeSource AncestorType=local:Cell}}"></Rectangle>
-        </ControlTemplate>
-    </UserControl.Template>
+    <Rectangle Fill="{Binding Color, RelativeSource={RelativeSource AncestorType=local:Cell}}" />
 </UserControl>

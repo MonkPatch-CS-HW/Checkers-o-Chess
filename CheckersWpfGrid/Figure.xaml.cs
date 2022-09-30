@@ -6,26 +6,32 @@ namespace CheckersWpfGrid;
 
 public partial class Figure : UserControl
 {
-    public Cell? Cell
+    public Figure()
     {
-        get => (Cell?)GetValue(CellProperty);
-        set
-        {
-            if (Cell?.Figure?.Cell != null)
-                Cell.Figure.Cell = null;
-            if (value != null)
-                value.Figure = this;
-            SetValue(CellProperty, value);
-        }
+        InitializeComponent();
     }
 
-    public static readonly DependencyProperty CellProperty = DependencyProperty.Register(
-        nameof(Cell),
-        typeof(Cell),
-        typeof(Figure),
-        new FrameworkPropertyMetadata(
-            null,
-            FrameworkPropertyMetadataOptions.AffectsRender));
+    public int Column
+    {
+        get => (int)GetValue(ColumnProperty);
+        set => SetValue(ColumnProperty, value);
+    }
+
+    public static readonly DependencyProperty ColumnProperty = DependencyProperty.Register(
+        nameof(Column),
+        typeof(int),
+        typeof(Figure));
+
+    public int Row
+    {
+        get => (int)GetValue(RowProperty);
+        set => SetValue(RowProperty, value);
+    }
+
+    public static readonly DependencyProperty RowProperty = DependencyProperty.Register(
+        nameof(Row),
+        typeof(int),
+        typeof(Figure));
 
     public Brush Sprite
     {
@@ -37,9 +43,4 @@ public partial class Figure : UserControl
         nameof(Sprite),
         typeof(Brush),
         typeof(Figure));
-
-    public Figure()
-    {
-        InitializeComponent();
-    }
 }
