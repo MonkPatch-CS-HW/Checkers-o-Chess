@@ -6,5 +6,8 @@
              xmlns:local="clr-namespace:CheckersWpfGrid"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
-    <Rectangle Fill="{Binding Sprite, RelativeSource={RelativeSource AncestorType=local:Figure}}" />
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="Converter"></BooleanToVisibilityConverter>
+    </UserControl.Resources>
+    <Rectangle Fill="Gray" Visibility="{Binding Path=Active, RelativeSource={RelativeSource AncestorType=local:Figure}, Converter={StaticResource Converter}}" />
 </UserControl>

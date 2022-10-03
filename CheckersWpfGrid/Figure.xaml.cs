@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
@@ -10,6 +11,33 @@ public partial class Figure : UserControl
     {
         InitializeComponent();
     }
+
+    public Player? Player
+    {
+        get => (Player?)GetValue(PlayerProperty);
+        set
+        {
+            SetValue(PlayerProperty, value);
+            Active = value != null;
+        }
+    }
+
+    public static readonly DependencyProperty PlayerProperty = DependencyProperty.Register(
+        nameof(Player),
+        typeof(Player),
+        typeof(Figure));
+
+    public bool Active
+    {
+        get => (bool)GetValue(ActiveProperty);
+        set => SetValue(ActiveProperty, value);
+    }
+
+    public static readonly DependencyProperty ActiveProperty = DependencyProperty.Register(
+        nameof(Active),
+        typeof(bool),
+        typeof(Figure),
+        new PropertyMetadata(true));
 
     public int Column
     {
