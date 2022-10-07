@@ -7,19 +7,7 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Window.Resources>
-        <ImageBrush x:Key="FigureBlack" ImageSource="C:/Users/Wynell/RiderProjects/CheckersWpfGrid/CheckersWpfGrid/images/FigureBlack.png"></ImageBrush>
-        <ImageBrush x:Key="FigureWhite" ImageSource="C:/Users/Wynell/RiderProjects/CheckersWpfGrid/CheckersWpfGrid/images/FigureWhite.png"></ImageBrush>
+        <ResourceDictionary Source="Themes/Default.xaml"></ResourceDictionary>
     </Window.Resources>
-    <Grid x:Name="Grid">
-        <!-- <Grid.ColumnDefinitions> -->
-        <!--     <ColumnDefinition></ColumnDefinition> -->
-        <!-- </Grid.ColumnDefinitions> -->
-        <!-- <Grid.RowDefinitions> -->
-        <!--     <RowDefinition></RowDefinition> -->
-        <!-- </Grid.RowDefinitions> -->
-        <!-- <local:Cell Grid.Column="0" Grid.Row="0" Color="Lime" x:Name="Cell"></local:Cell> -->
-        <!-- ~1~ <Rectangle Fill="{StaticResource BrushBlack}"></Rectangle> @1@ -->
-        <!-- <local:Figure Grid.Column="0" Grid.Row="0" Sprite="{StaticResource FigureBlack}" x:Name="Figure"></local:Figure> -->
-        <!-- <TextBox x:Name="TextBox" Grid.Column="0" Grid.Row="0" Width="100" Height="100" /> -->
-    </Grid>
+    <local:Renderer x:Name="Renderer" />
 </Window>

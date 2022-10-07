@@ -7,7 +7,10 @@
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
-        <BooleanToVisibilityConverter x:Key="Converter"></BooleanToVisibilityConverter>
+        <BooleanToVisibilityConverter x:Key="VisibilityConverter"></BooleanToVisibilityConverter>
+        <Brush x:Key="TransparentBrush">Transparent</Brush>
     </UserControl.Resources>
-    <Rectangle Fill="Gray" Visibility="{Binding Path=Active, RelativeSource={RelativeSource AncestorType=local:Figure}, Converter={StaticResource Converter}}" />
+    <Rectangle
+        Fill="{Binding Sprite, FallbackValue={StaticResource TransparentBrush}, RelativeSource={RelativeSource AncestorType=local:Figure}}"
+        Visibility="{Binding Path=Active, RelativeSource={RelativeSource AncestorType=local:Figure}, Converter={StaticResource VisibilityConverter}}" />
 </UserControl>

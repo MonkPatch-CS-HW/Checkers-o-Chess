@@ -1,25 +1,41 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
+using CheckersWpfGrid.Strategy;
 
 namespace CheckersWpfGrid;
 
 public partial class Figure : UserControl
 {
-    public Figure()
+    public readonly Game Game;
+
+    public Figure(Game game)
     {
         InitializeComponent();
+        Game = game;
+        Strategy = new RegularStrategy(this, Game);
     }
 
-    public Player? Player
+    public Cell Cell
     {
-        get => (Player?)GetValue(PlayerProperty);
+        get => Game.Table[Row, Column];
         set
         {
-            SetValue(PlayerProperty, value);
-            Active = value != null;
+            if (value.Figure != null)
+                return;
+            
+            Row = value.Row;
+            Column = value.Column;
+            value.Figure = this;
         }
+    }
+
+    public Player Player
+    {
+        get => (Player)GetValue(PlayerProperty);
+        init => SetValue(PlayerProperty, value);
     }
 
     public static readonly DependencyProperty PlayerProperty = DependencyProperty.Register(
@@ -33,11 +49,23 @@ public partial class Figure : UserControl
         set => SetValue(ActiveProperty, value);
     }
 
-    public static readonly DependencyProperty ActiveProperty = DependencyProperty.Register(
+    private static readonly DependencyProperty ActiveProperty = DependencyProperty.Register(
         nameof(Active),
         typeof(bool),
         typeof(Figure),
         new PropertyMetadata(true));
+
+    public MoveStrategy Strategy
+    {
+        get => (MoveStrategy)GetValue(StrategyProperty);
+        // TODO: Make readonly
+        set => SetValue(StrategyProperty, value);
+    }
+
+    private static readonly DependencyProperty StrategyProperty = DependencyProperty.Register(
+        nameof(MoveStrategy),
+        typeof(MoveStrategy),
+        typeof(Figure));
 
     public int Column
     {

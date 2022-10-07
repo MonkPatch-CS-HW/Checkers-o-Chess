@@ -2,9 +2,18 @@
 
 namespace CheckersWpfGrid;
 
-public abstract class Player
+public class Player
 {
-    public abstract Brush Sprite { get; }
+    public enum PlayerKind
+    {
+        White,
+        Black
+    }
 
-    public abstract bool CheckStartPosition(int row, int column);
+    public Player(PlayerKind kind)
+    {
+        Kind = kind;
+    }
+    
+    public PlayerKind Kind { get; init; }
 }

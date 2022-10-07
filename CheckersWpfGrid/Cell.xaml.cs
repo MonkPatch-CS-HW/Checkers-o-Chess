@@ -3,50 +3,87 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 
 namespace CheckersWpfGrid;
 
 public partial class Cell : UserControl
 {
-    public Cell()
+    public enum CellKind
+    {
+        White,
+        Black,
+    };
+
+    public enum CellPathState
+    {
+        None,
+        Through,
+        To,
+    }
+
+    public readonly Game Game;
+
+    public Cell(Game game)
     {
         InitializeComponent();
+        Game = game;
     }
 
-    public int Column
+    public int Row { get; init; }
+    public int Column { get; init; }
+
+    public Figure? Figure
     {
-        get => (int)GetValue(ColumnProperty);
-        set => SetValue(ColumnProperty, value);
+        get => Game.Board[Row, Column];
+        set
+        {
+            if (value == null)
+                return;
+
+            Game.Board[Row, Column] = value;
+        }
     }
 
-    public static readonly DependencyProperty ColumnProperty = DependencyProperty.Register(
-        nameof(Column),
-        typeof(int),
-        typeof(Cell));
-
-    public int Row
+    public CellKind Kind
     {
-        get => (int)GetValue(RowProperty);
-        set => SetValue(RowProperty, value);
+        get => (CellKind)GetValue(KindProperty);
+        init => SetValue(KindProperty, value);
     }
 
-    public static readonly DependencyProperty RowProperty = DependencyProperty.Register(
-        nameof(Row),
-        typeof(int),
-        typeof(Cell));
-
-    public Brush Color
-    {
-        get => (Brush)GetValue(ColorProperty);
-        set => SetValue(ColorProperty, value);
-    }
-
-    public static readonly DependencyProperty ColorProperty = DependencyProperty.Register(
-        nameof(Color),
-        typeof(Brush),
+    public static readonly DependencyProperty KindProperty = DependencyProperty.Register(
+        nameof(Kind),
+        typeof(CellKind),
         typeof(Cell),
-        new PropertyMetadata(Brushes.White));
+        new PropertyMetadata());
 
-    // public void Move()
+    public Cell? Relative(int distRow, int distColumn)
+    {
+        var (row, column) = (Row + distRow, Column + distColumn);
+        if (!Game.Table.Contains(row, column))
+            return null;
+        return Game.Table[row, column];
+    }
+
+    public int DiagonalDist(Cell other)
+    {
+        var distRow = Math.Abs(other.Row - Row);
+        var distColumn = Math.Abs(other.Column - Column);
+        if (distRow == distColumn)
+            return distRow;
+        return -1;
+    }
+
+    public CellPathState PathState
+    {
+        get => (CellPathState)GetValue(PathStateProperty);
+        set => SetValue(PathStateProperty, value);
+    }
+
+    public static readonly DependencyProperty PathStateProperty = DependencyProperty.Register(
+        nameof(PathState),
+        typeof(CellPathState),
+        typeof(Cell),
+        new PropertyMetadata(CellPathState.None));
 }

@@ -11,4 +11,23 @@
       <Folder Include="Images" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Page Update="Themes\Default.xaml">
+        <Generator>MSBuild:Compile</Generator>
+        <XamlRuntime>Wpf</XamlRuntime>
+        <SubType>Designer</SubType>
+      </Page>
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Images\FigureBlack.png" />
+      <Resource Include="Images\FigureBlack.png" />
+      <None Remove="Images\FigureBlackMiss.png" />
+      <Resource Include="Images\FigureBlackMiss.png" />
+      <None Remove="Images\FigureWhite.png" />
+      <Resource Include="Images\FigureWhite.png" />
+      <None Remove="Images\FigureWhiteMiss.png" />
+      <Resource Include="Images\FigureWhiteMiss.png" />
+    </ItemGroup>
+
 </Project>

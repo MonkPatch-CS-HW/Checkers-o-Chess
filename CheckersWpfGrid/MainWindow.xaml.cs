@@ -20,13 +20,11 @@ namespace CheckersWpfGrid
     /// </summary>
     public partial class MainWindow : Window
     {
-        public readonly Renderer Renderer;
         public Game Game;
 
         public MainWindow()
         {
             InitializeComponent();
-            Renderer = new Renderer(Grid);
             Game = new Game();
             Renderer.Render(Game);
         }
