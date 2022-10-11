@@ -7,7 +7,7 @@
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
-        <BooleanToVisibilityConverter x:Key="VisibilityConverter"></BooleanToVisibilityConverter>
+        <BooleanToVisibilityConverter x:Key="VisibilityConverter" />
         <Brush x:Key="TransparentBrush">Transparent</Brush>
     </UserControl.Resources>
     <Rectangle

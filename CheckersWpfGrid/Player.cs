@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Media;
 
 namespace CheckersWpfGrid;
 
@@ -12,19 +11,22 @@ public abstract class Player
         Black
     }
 
-    protected Game Game { get; }
-    public List<Figure> Figures { get; } = new List<Figure>();
-    
     protected Player(Game game)
     {
         Game = game;
     }
-    
+
+    protected Game Game { get; }
+    public List<Figure> Figures { get; } = new();
+
     public abstract string Name { get; }
-    
+
     public abstract PlayerKind Kind { get; }
 
-    public bool IsEnemy(Player player) => true;
+    public bool IsEnemy(Player player)
+    {
+        return true;
+    }
 
     public Figure? GetStartFigure(Cell cell)
     {

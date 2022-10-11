@@ -1,6 +1,4 @@
-﻿using System.Windows;
-
-namespace CheckersWpfGrid.MoveStrategy.RussianChess.Regular;
+﻿namespace CheckersWpfGrid.MoveStrategy.RussianChess.Regular;
 
 public class RegularStrategy : MoveStrategy
 {
@@ -16,10 +14,7 @@ public class RegularStrategy : MoveStrategy
         var builder = new RegularMoveBuilder(figure);
         if (!builder.CheckDestination(cell))
             return null;
-        if (figure.Player.CheckOppositeBorder(cell))
-        {
-            builder.AfterExecute(OnExecute).BeforeUndo(OnUndo);
-        }
+        if (figure.Player.CheckOppositeBorder(cell)) builder.AfterExecute(OnExecute).BeforeUndo(OnUndo);
         builder.To(cell);
         if (!builder.CheckAll())
             return null;

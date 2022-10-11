@@ -5,7 +5,7 @@ namespace CheckersWpfGrid;
 
 public class Board
 {
-    public List<Figure?> Figures = new List<Figure?>(new Figure?[64]);
+    public List<Figure?> Figures = new(new Figure?[64]);
 
     public Figure? this[int row, int column]
     {

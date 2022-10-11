@@ -1,18 +1,16 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using CheckersWpfGrid.MoveStrategy.RussianChess;
+﻿using System.Linq;
 
 namespace CheckersWpfGrid.MoveStrategy;
 
 public abstract class MoveStrategy
 {
-    protected Ruleset Ruleset { get; }
-
     protected MoveStrategy(Ruleset ruleset)
     {
         Ruleset = ruleset;
     }
-    
+
+    protected Ruleset Ruleset { get; }
+
     public abstract string Name { get; }
 
     public abstract Move? GetMove(Figure figure, Cell cell);
@@ -21,9 +19,7 @@ public abstract class MoveStrategy
     {
         var moveSet = new MoveSet(figure);
         foreach (var move in figure.Game.Table.Cells.Select(cell => GetMove(figure, cell)).Where(move => move != null))
-        {
             moveSet.Add(move);
-        }
 
         return moveSet;
     }

@@ -15,7 +15,7 @@ public abstract class BaseMoveBuilder : MoveBuilder
 
     public override bool CheckAll()
     {
-        for (int i = 0; i < Cells.Count; i++)
+        for (var i = 0; i < Cells.Count; i++)
         {
             if (Cells[i] == LastCell && Cells[i].Figure != null)
                 return false;

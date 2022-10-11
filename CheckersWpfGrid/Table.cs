@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Windows.Documents;
 
 namespace CheckersWpfGrid;
 
 public class Table
 {
-    public List<Cell> Cells = new List<Cell>(new Cell[64]);
-    
+    public List<Cell> Cells = new(new Cell[64]);
+
     public Cell this[int row, int column]
     {
         get
@@ -31,5 +30,4 @@ public class Table
     {
         return row is >= 0 and < 8 && column is >= 0 and < 8;
     }
-    
 }

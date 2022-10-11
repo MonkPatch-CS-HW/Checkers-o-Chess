@@ -7,6 +7,7 @@ namespace CheckersWpfGrid.MoveStrategy;
 public class MoveSet : List<Move>
 {
     public readonly Figure Figure;
+
     public MoveSet(Figure figure)
     {
         Figure = figure;
@@ -16,13 +17,13 @@ public class MoveSet : List<Move>
     {
         if (item == null)
             return;
-        
+
         if (item.Figure != Figure)
             throw new Exception("Cannot add other figure's move");
 
-        if (this.Any((move) => move.Destination == item.Destination))
+        if (this.Any(move => move.Destination == item.Destination))
             throw new Exception("Cannot add second move with the same destination");
-        
+
         base.Add(item);
     }
 
@@ -31,11 +32,17 @@ public class MoveSet : List<Move>
         foreach (var move in this)
             if (move.Destination == cell)
                 return move;
-        
+
         return null;
     }
 
-    public bool CanEat() => this.Any(move => move.Eats);
+    public bool CanEat()
+    {
+        return this.Any(move => move.Eats);
+    }
 
-    public bool CanMove() => Count > 0;
+    public bool CanMove()
+    {
+        return Count > 0;
+    }
 }

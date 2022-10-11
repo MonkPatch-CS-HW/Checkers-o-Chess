@@ -1,14 +1,42 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Input;
 using System.Windows.Media;
 
 namespace CheckersWpfGrid;
 
 public partial class Figure : UserControl
 {
+    public static readonly DependencyProperty PlayerProperty = DependencyProperty.Register(
+        nameof(Player),
+        typeof(Player),
+        typeof(Figure));
+
+    private static readonly DependencyProperty ActiveProperty = DependencyProperty.Register(
+        nameof(Active),
+        typeof(bool),
+        typeof(Figure),
+        new PropertyMetadata(true));
+
+    public static readonly DependencyProperty StrategyProperty = DependencyProperty.Register(
+        nameof(Strategy),
+        typeof(MoveStrategy.MoveStrategy),
+        typeof(Figure));
+
+    public static readonly DependencyProperty ColumnProperty = DependencyProperty.Register(
+        nameof(Column),
+        typeof(int),
+        typeof(Figure));
+
+    public static readonly DependencyProperty RowProperty = DependencyProperty.Register(
+        nameof(Row),
+        typeof(int),
+        typeof(Figure));
+
+    public static readonly DependencyProperty SpriteProperty = DependencyProperty.Register(
+        nameof(Sprite),
+        typeof(Brush),
+        typeof(Figure));
+
     public readonly Game Game;
 
     public Figure(Game game, Player player)
@@ -33,19 +61,11 @@ public partial class Figure : UserControl
         }
     }
 
-    public bool CanMove() => Strategy.GetMoves(this).CanMove();
-    public bool CanEat() => Strategy.GetMoves(this).CanEat();
-
     public Player Player
     {
         get => (Player)GetValue(PlayerProperty);
         init => SetValue(PlayerProperty, value);
     }
-
-    public static readonly DependencyProperty PlayerProperty = DependencyProperty.Register(
-        nameof(Player),
-        typeof(Player),
-        typeof(Figure));
 
     public bool Active
     {
@@ -53,22 +73,11 @@ public partial class Figure : UserControl
         set => SetValue(ActiveProperty, value);
     }
 
-    private static readonly DependencyProperty ActiveProperty = DependencyProperty.Register(
-        nameof(Active),
-        typeof(bool),
-        typeof(Figure),
-        new PropertyMetadata(true));
-
     public MoveStrategy.MoveStrategy Strategy
     {
         get => (MoveStrategy.MoveStrategy)GetValue(StrategyProperty);
         set => SetValue(StrategyProperty, value);
     }
-
-    public static readonly DependencyProperty StrategyProperty = DependencyProperty.Register(
-        nameof(Strategy),
-        typeof(MoveStrategy.MoveStrategy),
-        typeof(Figure));
 
     public int Column
     {
@@ -76,21 +85,11 @@ public partial class Figure : UserControl
         set => SetValue(ColumnProperty, value);
     }
 
-    public static readonly DependencyProperty ColumnProperty = DependencyProperty.Register(
-        nameof(Column),
-        typeof(int),
-        typeof(Figure));
-
     public int Row
     {
         get => (int)GetValue(RowProperty);
         set => SetValue(RowProperty, value);
     }
-
-    public static readonly DependencyProperty RowProperty = DependencyProperty.Register(
-        nameof(Row),
-        typeof(int),
-        typeof(Figure));
 
     public Brush Sprite
     {
@@ -98,8 +97,13 @@ public partial class Figure : UserControl
         set => SetValue(SpriteProperty, value);
     }
 
-    public static readonly DependencyProperty SpriteProperty = DependencyProperty.Register(
-        nameof(Sprite),
-        typeof(Brush),
-        typeof(Figure));
+    public bool CanMove()
+    {
+        return Strategy.GetMoves(this).CanMove();
+    }
+
+    public bool CanEat()
+    {
+        return Strategy.GetMoves(this).CanEat();
+    }
 }

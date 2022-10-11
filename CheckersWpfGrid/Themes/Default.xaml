@@ -8,22 +8,22 @@
     <Style TargetType="local:Cell">
         <Style.Triggers>
             <Trigger Property="Kind" Value="Black">
-                <Setter Property="Background" Value="Black"></Setter>
+                <Setter Property="Background" Value="Black" />
             </Trigger>
             <Trigger Property="Kind" Value="White">
-                <Setter Property="Background" Value="White"></Setter>
+                <Setter Property="Background" Value="White" />
             </Trigger>
             <Trigger Property="HighlightState" Value="Available">
-                <Setter Property="Background" Value="Green"></Setter>
+                <Setter Property="Background" Value="Green" />
             </Trigger>
             <Trigger Property="HighlightState" Value="Origin">
-                <Setter Property="Background" Value="DarkGray"></Setter>
+                <Setter Property="Background" Value="DarkGray" />
             </Trigger>
             <Trigger Property="HighlightState" Value="Path">
-                <Setter Property="Background" Value="DarkCyan"></Setter>
+                <Setter Property="Background" Value="DarkCyan" />
             </Trigger>
             <Trigger Property="HighlightState" Value="Destination">
-                <Setter Property="Background" Value="DarkGreen"></Setter>
+                <Setter Property="Background" Value="DarkGreen" />
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -32,38 +32,34 @@
             <DataTrigger
                 Binding="{Binding Path=Player.Kind, RelativeSource={RelativeSource Mode=Self}}"
                 Value="Black">
-                <Setter Property="Sprite" Value="{StaticResource FigureBlack}"></Setter>
+                <Setter Property="Sprite" Value="{StaticResource FigureBlack}" />
             </DataTrigger>
             <DataTrigger
                 Binding="{Binding Path=Player.Kind, RelativeSource={RelativeSource Mode=Self}}"
                 Value="White">
-                <Setter Property="Sprite" Value="{StaticResource FigureWhite}"></Setter>
+                <Setter Property="Sprite" Value="{StaticResource FigureWhite}" />
             </DataTrigger>
-            
+
 
             <MultiDataTrigger>
                 <MultiDataTrigger.Conditions>
                     <Condition
                         Binding="{Binding Path=Player.Kind, RelativeSource={RelativeSource Mode=Self}}"
-                        Value="Black">
-                    </Condition>
+                        Value="Black" />
                     <Condition Binding="{Binding Path=Strategy.Name, RelativeSource={RelativeSource Mode=Self}}"
-                               Value="Miss">
-                    </Condition>
+                               Value="Miss" />
                 </MultiDataTrigger.Conditions>
-                <Setter Property="Sprite" Value="{StaticResource FigureBlackMiss}"></Setter>
+                <Setter Property="Sprite" Value="{StaticResource FigureBlackMiss}" />
             </MultiDataTrigger>
             <MultiDataTrigger>
                 <MultiDataTrigger.Conditions>
                     <Condition
                         Binding="{Binding Path=Player.Kind, RelativeSource={RelativeSource Mode=Self}}"
-                        Value="White">
-                    </Condition>
+                        Value="White" />
                     <Condition Binding="{Binding Path=Strategy.Name, RelativeSource={RelativeSource Mode=Self}}"
-                               Value="Miss">
-                    </Condition>
+                               Value="Miss" />
                 </MultiDataTrigger.Conditions>
-                <Setter Property="Sprite" Value="{StaticResource FigureWhiteMiss}"></Setter>
+                <Setter Property="Sprite" Value="{StaticResource FigureWhiteMiss}" />
             </MultiDataTrigger>
         </Style.Triggers>
     </Style>

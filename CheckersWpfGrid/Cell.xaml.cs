@@ -1,12 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Media;
 
 namespace CheckersWpfGrid;
 
@@ -25,20 +19,32 @@ public record Direction(int DirRow, int DirColumn)
 
 public partial class Cell : UserControl
 {
-    public enum CellKind
-    {
-        White,
-        Black,
-    };
-
     public enum CellHighlightState
     {
         None,
         Available,
         Origin,
         Path,
-        Destination,
+        Destination
     }
+
+    public enum CellKind
+    {
+        White,
+        Black
+    }
+
+    public static readonly DependencyProperty KindProperty = DependencyProperty.Register(
+        nameof(Kind),
+        typeof(CellKind),
+        typeof(Cell),
+        new PropertyMetadata());
+
+    public static readonly DependencyProperty HighlightStateProperty = DependencyProperty.Register(
+        nameof(HighlightState),
+        typeof(CellHighlightState),
+        typeof(Cell),
+        new PropertyMetadata(CellHighlightState.None));
 
     public readonly Game Game;
 
@@ -69,11 +75,11 @@ public partial class Cell : UserControl
         init => SetValue(KindProperty, value);
     }
 
-    public static readonly DependencyProperty KindProperty = DependencyProperty.Register(
-        nameof(Kind),
-        typeof(CellKind),
-        typeof(Cell),
-        new PropertyMetadata());
+    public CellHighlightState HighlightState
+    {
+        get => (CellHighlightState)GetValue(HighlightStateProperty);
+        set => SetValue(HighlightStateProperty, value);
+    }
 
     public Cell? Relative(Direction direction)
     {
@@ -103,16 +109,4 @@ public partial class Cell : UserControl
             return new Direction(0, Math.Sign(distColumn));
         return new Direction(Math.Sign(distRow), Math.Sign(distColumn));
     }
-
-    public CellHighlightState HighlightState
-    {
-        get => (CellHighlightState)GetValue(HighlightStateProperty);
-        set => SetValue(HighlightStateProperty, value);
-    }
-
-    public static readonly DependencyProperty HighlightStateProperty = DependencyProperty.Register(
-        nameof(HighlightState),
-        typeof(CellHighlightState),
-        typeof(Cell),
-        new PropertyMetadata(CellHighlightState.None));
 }

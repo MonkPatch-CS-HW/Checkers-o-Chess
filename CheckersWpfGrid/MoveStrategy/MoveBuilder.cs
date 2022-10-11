@@ -5,14 +5,8 @@ namespace CheckersWpfGrid.MoveStrategy;
 
 public abstract class MoveBuilder
 {
-    protected Figure Figure { get; }
-    protected Cell StartCell { get; }
-    protected List<Cell> Cells { get; } = new List<Cell>();
-    protected List<Figure> EatenFigures { get; } = new List<Figure>();
-
     protected Action<Figure>? ExecuteHandler;
     protected Action<Figure>? UndoHandler;
-    protected int GameHash { get; }
 
     protected MoveBuilder(Figure figure)
     {
@@ -20,6 +14,12 @@ public abstract class MoveBuilder
         StartCell = figure.Cell;
         GameHash = figure.Game.GetHashCode();
     }
+
+    protected Figure Figure { get; }
+    protected Cell StartCell { get; }
+    protected List<Cell> Cells { get; } = new();
+    protected List<Figure> EatenFigures { get; } = new();
+    protected int GameHash { get; }
 
     protected Cell LastCell => Cells.Count > 0 ? Cells[^1] : StartCell;
 
@@ -63,12 +63,10 @@ public abstract class MoveBuilder
     {
         if (!CheckDestination(cell))
             throw new Exception($"Cannot move to {cell}");
-        
+
         while (LastCell != cell)
-        {
             if (!Next(LastCell.Direction(cell)))
                 throw new Exception($"Could not move figure to {cell}");
-        }
 
         return this;
     }
@@ -79,10 +77,10 @@ public abstract class MoveBuilder
             throw new Exception("Game has changed between creation of move builder and building");
         if (!CheckAll())
             throw new Exception("Trying to build incorrect move");
-        
+
         var move = new Move(Figure, Cells, LastCell)
         {
-            EatenFigures = EatenFigures,
+            EatenFigures = EatenFigures
         };
         move.OnExecute += ExecuteHandler;
         move.OnUndo += UndoHandler;

@@ -5,12 +5,13 @@ namespace CheckersWpfGrid;
 
 public class Highlighter
 {
-    protected List<Cell> Highlighted { get; } = new List<Cell>();
-    protected Game Game { get; }
     public Highlighter(Game game)
     {
         Game = game;
     }
+
+    protected List<Cell> Highlighted { get; } = new();
+    protected Game Game { get; }
 
     public Highlighter ClearHighlighting()
     {
@@ -43,10 +44,7 @@ public class Highlighter
         foreach (var move in moveSet)
         {
             origin.Add(move.Origin);
-            foreach (var cell in move.Path)
-            {
-                path.Add(cell);
-            }
+            foreach (var cell in move.Path) path.Add(cell);
             destination.Add(move.Destination);
         }
 
@@ -55,16 +53,19 @@ public class Highlighter
             cell.HighlightState = Cell.CellHighlightState.Origin;
             Highlighted.Add(cell);
         }
+
         foreach (var cell in path)
         {
             cell.HighlightState = Cell.CellHighlightState.Path;
             Highlighted.Add(cell);
         }
+
         foreach (var cell in destination)
         {
             cell.HighlightState = Cell.CellHighlightState.Destination;
             Highlighted.Add(cell);
         }
+
         return this;
     }
 }

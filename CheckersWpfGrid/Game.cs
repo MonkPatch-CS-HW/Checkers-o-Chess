@@ -1,27 +1,12 @@
 ﻿using System.Collections.Generic;
-using System.Data;
 using System.Linq;
-using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 using CheckersWpfGrid.MoveStrategy;
-using CheckersWpfGrid.MoveStrategy.RussianChess.Miss;
 
 namespace CheckersWpfGrid;
 
 public sealed class Game
 {
-    public Board Board { get; }
-    public Table Table { get; }
-    public List<Player> Players { get; }
-    private MoveSet? MoveSet { get; set; }
-    public Ruleset Ruleset { get; }
-    public List<Move> History { get; } = new List<Move>();
-    private Highlighter Highlighter { get; }
-
-    private List<Figure> AvailableFigures { get; set; } = new List<Figure>();
-
     public Game(Ruleset ruleset)
     {
         Ruleset = ruleset;
@@ -32,6 +17,16 @@ public sealed class Game
         AvailableFigures = Ruleset.GetAvailableFigures(this);
         Highlighter.HighlightFigures(AvailableFigures);
     }
+
+    public Board Board { get; }
+    public Table Table { get; }
+    public List<Player> Players { get; }
+    private MoveSet? MoveSet { get; set; }
+    public Ruleset Ruleset { get; }
+    public List<Move> History { get; } = new();
+    private Highlighter Highlighter { get; }
+
+    private List<Figure> AvailableFigures { get; set; } = new();
 
     public Move? LastMove => History.Count > 0 ? History[^1] : null;
 
@@ -46,14 +41,12 @@ public sealed class Game
     {
         var table = new Table();
         for (var r = 0; r < 8; r++)
+        for (var c = 0; c < 8; c++)
         {
-            for (var c = 0; c < 8; c++)
-            {
-                var color = (c + r) % 2 == 1 ? Cell.CellKind.Black : Cell.CellKind.White;
-                var cell = new Cell(this) { Kind = color, Row = r, Column = c };
-                cell.MouseDown += CellOnMouseDown;
-                table[r, c] = cell;
-            }
+            var color = (c + r) % 2 == 1 ? Cell.CellKind.Black : Cell.CellKind.White;
+            var cell = new Cell(this) { Kind = color, Row = r, Column = c };
+            cell.MouseDown += CellOnMouseDown;
+            table[r, c] = cell;
         }
 
         return table;
@@ -63,19 +56,15 @@ public sealed class Game
     {
         var board = new Board();
         for (var r = 0; r < 8; r++)
-        {
-            for (var c = 0; c < 8; c++)
+        for (var c = 0; c < 8; c++)
+            foreach (var player in Players)
             {
-                foreach (var player in Players)
-                {
-                    var figure = player.GetStartFigure(Table[r, c]);
-                    if (figure == null)
-                        continue;
-                    figure.MouseDown += FigureOnMouseDown;
-                    board[r, c] = figure;
-                }
+                var figure = player.GetStartFigure(Table[r, c]);
+                if (figure == null)
+                    continue;
+                figure.MouseDown += FigureOnMouseDown;
+                board[r, c] = figure;
             }
-        }
 
         return board;
     }
@@ -113,6 +102,7 @@ public sealed class Game
             MoveSet = null;
             return true;
         }
+
         if (!Ruleset.CanSelectFigure(figure))
             return false;
         MoveSet = figure.Strategy.GetMoves(figure);
@@ -122,6 +112,6 @@ public sealed class Game
 
     public List<Player> GetActivePlayers()
     {
-        return Players.Where((player) => player.CanMove()).ToList();
+        return Players.Where(player => player.CanMove()).ToList();
     }
 }
