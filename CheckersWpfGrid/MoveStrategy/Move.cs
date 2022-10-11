@@ -12,19 +12,21 @@ public class Move
     public Cell Origin { get; init; }
     public Cell Destination { get; }
     public List<Figure> EatenFigures { get; init; } = new List<Figure>();
-    
+    public List<Cell> Path { get; }
+
     public event Action<Figure>? OnExecute;
     public event Action<Figure>? OnUndo;
 
     public int OriginHash { get; }
     public int DestinationHash { get; private set; }
 
-    public Move(Figure figure, Cell destination)
+    public Move(Figure figure, List<Cell> path, Cell destination)
     {
         Figure = figure;
         OriginHash = figure.Game.GetHashCode();
         Origin = figure.Cell;
         Destination = destination;
+        Path = path;
     }
 
     public bool Eats => EatenFigures.Count > 0;
@@ -52,15 +54,5 @@ public class Move
             figure.Active = true;
 
         Figure.Cell = Origin;
-    }
-
-    public void HighlightCells()
-    {
-        Destination.Highlighted = true;
-    }
-
-    public void ClearHighlighting()
-    {
-        Destination.Highlighted = false;
     }
 }

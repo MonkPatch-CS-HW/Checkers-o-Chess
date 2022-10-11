@@ -31,6 +31,15 @@ public partial class Cell : UserControl
         Black,
     };
 
+    public enum CellHighlightState
+    {
+        None,
+        Available,
+        Origin,
+        Path,
+        Destination,
+    }
+
     public readonly Game Game;
 
     public Cell(Game game)
@@ -95,15 +104,15 @@ public partial class Cell : UserControl
         return new Direction(Math.Sign(distRow), Math.Sign(distColumn));
     }
 
-    public bool Highlighted
+    public CellHighlightState HighlightState
     {
-        get => (bool)GetValue(HighlightedProperty);
-        set => SetValue(HighlightedProperty, value);
+        get => (CellHighlightState)GetValue(HighlightStateProperty);
+        set => SetValue(HighlightStateProperty, value);
     }
 
-    public static readonly DependencyProperty HighlightedProperty = DependencyProperty.Register(
-        nameof(Highlighted),
-        typeof(bool),
+    public static readonly DependencyProperty HighlightStateProperty = DependencyProperty.Register(
+        nameof(HighlightState),
+        typeof(CellHighlightState),
         typeof(Cell),
-        new PropertyMetadata(false));
+        new PropertyMetadata(CellHighlightState.None));
 }

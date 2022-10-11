@@ -10,7 +10,7 @@ public class BlackPlayer : Player
 
     public override PlayerKind Kind => PlayerKind.Black;
 
-    public override Figure? GetStartFigure(Cell cell)
+    protected override Figure? CreateFigure(Cell cell)
     {
         if (cell.Kind != Cell.CellKind.Black || cell.Row >= 3)
             return null;

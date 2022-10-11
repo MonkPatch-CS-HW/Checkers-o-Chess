@@ -33,6 +33,9 @@ public partial class Figure : UserControl
         }
     }
 
+    public bool CanMove() => Strategy.GetMoves(this).CanMove();
+    public bool CanEat() => Strategy.GetMoves(this).CanEat();
+
     public Player Player
     {
         get => (Player)GetValue(PlayerProperty);

@@ -95,7 +95,7 @@ abstract public class MoveBuilder
         if (!CheckAll())
             throw new Exception("Trying to build incorrect move");
         
-        var move = new Move(Figure, LastCell)
+        var move = new Move(Figure, Cells, LastCell)
         {
             EatenFigures = EatenFigures,
         };

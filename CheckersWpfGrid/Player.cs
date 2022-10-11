@@ -1,4 +1,6 @@
-﻿using System.Windows.Media;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Media;
 
 namespace CheckersWpfGrid;
 
@@ -11,6 +13,7 @@ public abstract class Player
     }
 
     protected Game Game { get; }
+    public List<Figure> Figures { get; } = new List<Figure>();
     
     protected Player(Game game)
     {
@@ -23,7 +26,20 @@ public abstract class Player
 
     public bool IsEnemy(Player player) => true;
 
-    public abstract Figure? GetStartFigure(Cell cell);
+    public Figure? GetStartFigure(Cell cell)
+    {
+        var figure = CreateFigure(cell);
+        if (figure != null)
+            Figures.Add(figure);
+        return figure;
+    }
+
+    protected abstract Figure? CreateFigure(Cell cell);
 
     public abstract bool CheckOppositeBorder(Cell cell);
+
+    public bool CanMove()
+    {
+        return Figures.Any(figure => figure.CanMove());
+    }
 }

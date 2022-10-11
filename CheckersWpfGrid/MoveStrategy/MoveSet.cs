@@ -25,18 +25,6 @@ public class MoveSet : List<Move>
         
         base.Add(item);
     }
-    
-    public void HighlightCells()
-    {
-        foreach (var move in this)
-            move.HighlightCells();
-    }
-
-    public void ClearHighlighting()
-    {
-        foreach (var move in this)
-            move.ClearHighlighting();
-    }
 
     public Move? GetMoveByDestination(Cell cell)
     {
@@ -47,8 +35,7 @@ public class MoveSet : List<Move>
         return null;
     }
 
-    public bool CanEat()
-    {
-        return this.Any(move => move.Eats);
-    }
+    public bool CanEat() => this.Any(move => move.Eats);
+
+    public bool CanMove() => Count > 0;
 }

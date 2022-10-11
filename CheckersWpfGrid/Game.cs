@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -11,12 +12,15 @@ namespace CheckersWpfGrid;
 
 public sealed class Game
 {
-    public readonly Board Board;
-    public readonly Table Table;
-    public readonly List<Player> Players;
-    private readonly List<Cell> _selectedCells = new List<Cell>();
-    private MoveSet? _moveSet;
-    public Ruleset Ruleset;
+    public Board Board { get; }
+    public Table Table { get; }
+    public List<Player> Players { get; }
+    private MoveSet? MoveSet { get; set; }
+    public Ruleset Ruleset { get; }
+    public List<Move> History { get; } = new List<Move>();
+    private Highlighter Highlighter { get; }
+
+    private List<Figure> AvailableFigures { get; set; } = new List<Figure>();
 
     public Game(Ruleset ruleset)
     {
@@ -24,6 +28,18 @@ public sealed class Game
         Table = CreateTable();
         Players = CreatePlayers();
         Board = CreateBoard();
+        Highlighter = new Highlighter(this);
+        AvailableFigures = Ruleset.GetAvailableFigures(this);
+        Highlighter.HighlightFigures(AvailableFigures);
+    }
+
+    public Move? LastMove => History.Count > 0 ? History[^1] : null;
+
+    private List<Player> CreatePlayers()
+    {
+        var first = new BlackPlayer(this);
+        var second = new WhitePlayer(this);
+        return new List<Player> { first, second };
     }
 
     private Table CreateTable()
@@ -41,23 +57,6 @@ public sealed class Game
         }
 
         return table;
-    }
-
-    private void CellOnMouseDown(object sender, MouseButtonEventArgs e)
-    {
-        var cell = (Cell)sender;
-        var move = _moveSet?.GetMoveByDestination(cell);
-        if (move == null) return;
-        move.Execute();
-        _moveSet?.ClearHighlighting();
-        _moveSet = null;
-    }
-
-    private List<Player> CreatePlayers()
-    {
-        var first = new BlackPlayer(this);
-        var second = new WhitePlayer(this);
-        return new List<Player> { first, second };
     }
 
     private Board CreateBoard()
@@ -81,40 +80,48 @@ public sealed class Game
         return board;
     }
 
+    private void CellOnMouseDown(object sender, MouseButtonEventArgs e)
+    {
+        var cell = (Cell)sender;
+        SelectCell(cell);
+    }
+
     private void FigureOnMouseDown(object sender, MouseButtonEventArgs e)
     {
         var figure = (Figure)sender;
         SelectFigure(figure);
     }
 
-    private void ClearCellsSelection()
+    private void SelectCell(Cell cell)
     {
-        foreach (var cell in _selectedCells.ToList())
-        {
-            // cell.Highlighted = false;
-            _selectedCells.Remove(cell);
-        }
-    }
-
-    private void SelectCells(List<Cell>? cells)
-    {
-        ClearCellsSelection();
-        if (cells == null)
-            return;
-        
-        foreach (var cell in cells)
-        {
-            // cell.Highlighted = true;
-            _selectedCells.Add(cell);
-        }
+        var move = MoveSet?.GetMoveByDestination(cell);
+        if (move == null) return;
+        move.Execute();
+        History.Add(move);
+        MoveSet = null;
+        AvailableFigures = Ruleset.GetAvailableFigures(this);
+        Highlighter.ClearHighlighting().HighlightFigures(AvailableFigures);
     }
 
     public bool SelectFigure(Figure? figure)
     {
-        _moveSet?.ClearHighlighting();
-        if (figure != null && figure != _moveSet?.Figure)
-            _moveSet = figure.Strategy.GetMoves(figure);
-        _moveSet?.HighlightCells();
+        Highlighter.ClearHighlighting().HighlightFigures(AvailableFigures);
+        if (figure == null)
+            return true;
+        if (figure == MoveSet?.Figure)
+        {
+            MoveSet = null;
+            return true;
+        }
+        if (!Ruleset.CanSelectFigure(figure))
+            return false;
+        MoveSet = figure.Strategy.GetMoves(figure);
+        Highlighter.HighlightMoveSet(MoveSet);
         return true;
+    }
+
+    public List<Player> GetActivePlayers()
+    {
+        return Players.Where((player) => player.CanMove()).ToList();
     }
 }

@@ -13,8 +13,17 @@
             <Trigger Property="Kind" Value="White">
                 <Setter Property="Background" Value="White"></Setter>
             </Trigger>
-            <Trigger Property="Highlighted" Value="True">
-                <Setter Property="Background" Value="Yellow"></Setter>
+            <Trigger Property="HighlightState" Value="Available">
+                <Setter Property="Background" Value="Green"></Setter>
+            </Trigger>
+            <Trigger Property="HighlightState" Value="Origin">
+                <Setter Property="Background" Value="DarkGray"></Setter>
+            </Trigger>
+            <Trigger Property="HighlightState" Value="Path">
+                <Setter Property="Background" Value="DarkCyan"></Setter>
+            </Trigger>
+            <Trigger Property="HighlightState" Value="Destination">
+                <Setter Property="Background" Value="DarkGreen"></Setter>
             </Trigger>
         </Style.Triggers>
     </Style>
