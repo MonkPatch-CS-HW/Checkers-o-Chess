@@ -1,6 +1,8 @@
-﻿namespace CheckersWpfGrid.MoveStrategy.RussianChess.Regular;
+﻿using CheckersWpfGrid.MoveStrategy.RussianChess.Base;
 
-public class RegularMoveBuilder : MoveBuilder
+namespace CheckersWpfGrid.MoveStrategy.RussianChess.Regular;
+
+public class RegularMoveBuilder : BaseMoveBuilder
 {
     public RegularMoveBuilder(Figure figure) : base(figure)
     {

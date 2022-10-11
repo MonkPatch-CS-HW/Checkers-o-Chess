@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Windows;
-using CheckersWpfGrid.MoveStrategy;
 
 namespace CheckersWpfGrid.MoveStrategy;
 
-abstract public class MoveBuilder
+public abstract class MoveBuilder
 {
     protected Figure Figure { get; }
     protected Cell StartCell { get; }
@@ -25,12 +23,16 @@ abstract public class MoveBuilder
 
     protected Cell LastCell => Cells.Count > 0 ? Cells[^1] : StartCell;
 
-    protected bool EatsFigure(Figure figure)
+    public abstract bool CheckNext(Direction direction);
+
+    public abstract bool CheckDestination(Cell cell);
+
+    public abstract bool CheckAll();
+
+    public bool EatsFigure(Figure figure)
     {
         return Figure.Player != figure.Player;
     }
-
-    public bool CheckNext(Direction direction) => true;
 
     public bool Next(Direction direction)
     {
@@ -44,8 +46,6 @@ abstract public class MoveBuilder
         Cells.Add(nextCell);
         return true;
     }
-    
-    public abstract bool CheckDestination(Cell cell);
 
     public MoveBuilder AfterExecute(Action<Figure> executeHandler)
     {
@@ -71,21 +71,6 @@ abstract public class MoveBuilder
         }
 
         return this;
-    }
-
-    public bool CheckAll()
-    {
-        for (int i = 0; i < Cells.Count; i++)
-        {
-            if (Cells[i] == LastCell && Cells[i].Figure != null)
-                return false;
-            if (i > 0 && Cells[i].Figure != null && Cells[i - 1].Figure != null)
-                return false;
-            if (Cells[i].Figure != null && Cells[i].Figure!.Player == Figure.Player)
-                return false;
-        }
-
-        return true;
     }
 
     public Move Build()

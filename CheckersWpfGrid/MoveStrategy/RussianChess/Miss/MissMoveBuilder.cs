@@ -1,6 +1,8 @@
-﻿namespace CheckersWpfGrid.MoveStrategy.RussianChess.Miss;
+﻿using CheckersWpfGrid.MoveStrategy.RussianChess.Base;
 
-public class MissMoveBuilder : MoveBuilder
+namespace CheckersWpfGrid.MoveStrategy.RussianChess.Miss;
+
+public class MissMoveBuilder : BaseMoveBuilder
 {
     public MissMoveBuilder(Figure figure) : base(figure)
     {
