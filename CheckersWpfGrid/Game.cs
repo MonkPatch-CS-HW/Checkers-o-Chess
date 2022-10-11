@@ -26,7 +26,7 @@ public sealed class Game
     public List<Move> History { get; } = new();
     private Highlighter Highlighter { get; }
 
-    private List<Figure> AvailableFigures { get; set; } = new();
+    private List<Figure> AvailableFigures { get; set; }
 
     public Move? LastMove => History.Count > 0 ? History[^1] : null;
 
