@@ -81,15 +81,16 @@ public sealed class Game
         SelectFigure(figure);
     }
 
-    private void SelectCell(Cell cell)
+    private bool SelectCell(Cell cell)
     {
         var move = MoveSet?.GetMoveByDestination(cell);
-        if (move == null) return;
+        if (move == null) return false;
         move.Execute();
         History.Add(move);
         MoveSet = null;
         AvailableFigures = Ruleset.GetAvailableFigures(this);
         Highlighter.ClearHighlighting().HighlightFigures(AvailableFigures);
+        return true;
     }
 
     public bool SelectFigure(Figure? figure)

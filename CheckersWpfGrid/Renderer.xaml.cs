@@ -1,14 +1,16 @@
 ﻿using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 
 namespace CheckersWpfGrid;
 
-public partial class Renderer : UserControl
+public partial class Renderer : Window
 {
-    public Renderer()
+    public Renderer(Game game)
     {
         InitializeComponent();
+        Render(game);
     }
 
     public void Render(Game game)

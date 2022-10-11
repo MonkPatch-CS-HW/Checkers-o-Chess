@@ -11,10 +11,13 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
-        var ruleset = new RussianChessRuleset();
-        Game = new Game(ruleset);
-        Renderer.Render(Game);
     }
 
-    public Game Game { get; }
+    private void OnCreateButtonClick(object sender, RoutedEventArgs e)
+    {
+        var ruleset = new RussianChessRuleset();
+        var game = new Game(ruleset);
+        var renderer = new Renderer(game);
+        renderer.Show();
+    }
 }
