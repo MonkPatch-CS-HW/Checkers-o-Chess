@@ -18,10 +18,15 @@ public abstract class Ruleset
         _cache[name] = strategy ?? throw new Exception($"Strategy {name} does not exist");
         return _cache[name]!;
     }
+    
+    public List<Player> GetActivePlayers(Game game)
+    {
+        return game.Players.Where(player => player.CanMove()).ToList();
+    }
 
     public Player? CheckWinner(Game game)
     {
-        var activePlayers = game.GetActivePlayers();
+        var activePlayers = GetActivePlayers(game);
         if (activePlayers.Count > 1)
             return null;
         return activePlayers[0];
@@ -35,18 +40,5 @@ public abstract class Ruleset
 
         var index = (game.Players.IndexOf(game.LastMove.Figure.Player) + 1) % game.Players.Count;
         return game.Players[index];
-    }
-
-    public bool CanSelectFigure(Figure figure)
-    {
-        if (figure.Game.LastMove != null && figure.Game.LastMove.EatenFigures.Count > 0 &&
-            figure.Game.LastMove.Figure.CanEat())
-            return figure == figure.Game.LastMove.Figure;
-        return figure.Active && figure.Player == GetCurrentPlayer(figure.Game) && figure.CanMove();
-    }
-
-    public List<Figure> GetAvailableFigures(Game game)
-    {
-        return GetCurrentPlayer(game).Figures.Where(CanSelectFigure).ToList();
     }
 }

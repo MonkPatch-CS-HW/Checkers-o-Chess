@@ -25,6 +25,9 @@
             <Trigger Property="HighlightState" Value="Destination">
                 <Setter Property="Background" Value="DarkGreen" />
             </Trigger>
+            <Trigger Property="HighlightState" Value="Trace">
+                <Setter Property="Background" Value="Maroon" />
+            </Trigger>
         </Style.Triggers>
     </Style>
     <Style TargetType="local:Figure">

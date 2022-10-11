@@ -13,6 +13,17 @@ public class Highlighter
     protected List<Cell> Highlighted { get; } = new();
     protected Game Game { get; }
 
+    public Highlighter HighlightGame()
+    {
+        ClearHighlighting();
+        HighlightTrace(Game.LastMove);
+        if (Game.CurrentPlayer.IsBot)
+            return this;
+        HighlightFigures(Game.AvailableFigures);
+        HighlightMoves(Game.AvailableMoves);
+        return this;
+    }
+
     public Highlighter ClearHighlighting()
     {
         while (Highlighted.Count > 0)
@@ -25,8 +36,11 @@ public class Highlighter
         return this;
     }
 
-    public Highlighter HighlightFigures(List<Figure> figures)
+    public Highlighter HighlightFigures(List<Figure>? figures)
     {
+        if (figures == null)
+            return this;
+        
         foreach (var figure in figures)
         {
             figure.Cell.HighlightState = Cell.CellHighlightState.Available;
@@ -36,8 +50,11 @@ public class Highlighter
         return this;
     }
 
-    public Highlighter HighlightMoveSet(MoveSet moveSet)
+    public Highlighter HighlightMoves(MoveSet? moveSet)
     {
+        if (moveSet == null)
+            return this;
+        
         var origin = new List<Cell>();
         var path = new List<Cell>();
         var destination = new List<Cell>();
@@ -66,6 +83,26 @@ public class Highlighter
             Highlighted.Add(cell);
         }
 
+        return this;
+    }
+
+    public Highlighter HighlightTrace(Move? move)
+    {
+        if (move == null)
+            return this;
+        
+        move.Origin.HighlightState = Cell.CellHighlightState.Trace;
+        Highlighted.Add(move.Origin);
+        
+        foreach (var cell in move.Path)
+        {
+            cell.HighlightState = Cell.CellHighlightState.Trace;
+            Highlighted.Add(cell);
+        }
+
+        move.Destination.HighlightState = Cell.CellHighlightState.Trace;
+        Highlighted.Add(move.Destination);
+        
         return this;
     }
 }

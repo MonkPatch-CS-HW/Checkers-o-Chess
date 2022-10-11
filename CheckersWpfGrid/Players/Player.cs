@@ -20,12 +20,13 @@ public abstract class Player
     public List<Figure> Figures { get; } = new();
 
     public abstract string Name { get; }
+    public virtual bool IsBot => false;
 
     public abstract PlayerKind Kind { get; }
 
-    public bool IsEnemy(Player player)
+    public virtual bool IsEnemy(Player player)
     {
-        return true;
+        return player != this;
     }
 
     public Figure? GetStartFigure(Cell cell)
@@ -39,6 +40,19 @@ public abstract class Player
     protected abstract Figure? CreateFigure(Cell cell);
 
     public abstract bool CheckOppositeBorder(Cell cell);
+    
+    public bool CanSelectFigure(Figure figure)
+    {
+        if (figure.Game.LastMove != null && figure.Game.LastMove.EatenFigures.Count > 0 &&
+            figure.Game.LastMove.Figure.CanEat())
+            return figure == figure.Game.LastMove.Figure;
+        return figure.Active && figure.Player == this && figure.CanMove();
+    }
+
+    public List<Figure> GetAvailableFigures()
+    {
+        return Figures.Where(CanSelectFigure).ToList();
+    }
 
     public bool CanMove()
     {

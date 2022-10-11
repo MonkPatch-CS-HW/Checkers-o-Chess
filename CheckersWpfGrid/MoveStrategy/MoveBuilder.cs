@@ -11,17 +11,18 @@ public abstract class MoveBuilder
     protected MoveBuilder(Figure figure)
     {
         Figure = figure;
-        StartCell = figure.Cell;
+        Origin = figure.Cell;
         GameHash = figure.Game.GetHashCode();
     }
 
     protected Figure Figure { get; }
-    protected Cell StartCell { get; }
-    protected List<Cell> Cells { get; } = new();
+    protected List<Cell> Path { get; } = new();
     protected List<Figure> EatenFigures { get; } = new();
     protected int GameHash { get; }
 
-    protected Cell LastCell => Cells.Count > 0 ? Cells[^1] : StartCell;
+    protected Cell Origin { get; }
+
+    protected Cell LastCell => Path.Count > 0 ? Path[^1] : Origin;
 
     public abstract bool CheckNext(Direction direction);
 
@@ -31,7 +32,7 @@ public abstract class MoveBuilder
 
     public bool EatsFigure(Figure figure)
     {
-        return Figure.Player != figure.Player;
+        return Figure.Player.IsEnemy(figure.Player);
     }
 
     public bool Next(Direction direction)
@@ -43,7 +44,7 @@ public abstract class MoveBuilder
             throw new Exception("Moved to direction of another cell and got null cell...");
         if (nextCell.Figure != null && EatsFigure(nextCell.Figure))
             EatenFigures.Add(nextCell.Figure);
-        Cells.Add(nextCell);
+        Path.Add(nextCell);
         return true;
     }
 
@@ -78,7 +79,7 @@ public abstract class MoveBuilder
         if (!CheckAll())
             throw new Exception("Trying to build incorrect move");
 
-        var move = new Move(Figure, Cells, LastCell)
+        var move = new Move(Figure, Path)
         {
             EatenFigures = EatenFigures
         };

@@ -15,7 +15,7 @@ public class RegularMoveBuilder : BaseMoveBuilder
 
     public new bool CheckAll()
     {
-        if (Cells.Count == 2 && Cells[0].Figure == null)
+        if (Path.Count == 2 && Path[0].Figure == null)
             return false;
         return base.CheckAll();
     }

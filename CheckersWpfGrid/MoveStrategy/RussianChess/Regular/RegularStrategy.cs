@@ -28,6 +28,6 @@ public class RegularStrategy : MoveStrategy
 
     protected void OnUndo(Figure figure)
     {
-        figure.Strategy = Ruleset.GetStrategy("Original");
+        figure.Strategy = Ruleset.GetStrategy("Regular");
     }
 }

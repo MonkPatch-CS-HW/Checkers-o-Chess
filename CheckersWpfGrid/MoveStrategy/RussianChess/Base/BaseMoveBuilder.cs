@@ -15,13 +15,13 @@ public abstract class BaseMoveBuilder : MoveBuilder
 
     public override bool CheckAll()
     {
-        for (var i = 0; i < Cells.Count; i++)
+        for (var i = 0; i < Path.Count; i++)
         {
-            if (Cells[i] == LastCell && Cells[i].Figure != null)
+            if (Path[i] == LastCell && Path[i].Figure != null)
                 return false;
-            if (i > 0 && Cells[i].Figure != null && Cells[i - 1].Figure != null)
+            if (i > 0 && Path[i].Figure != null && Path[i - 1].Figure != null)
                 return false;
-            if (Cells[i].Figure != null && Cells[i].Figure!.Player == Figure.Player)
+            if (Path[i].Figure != null && Path[i].Figure!.Player == Figure.Player)
                 return false;
         }
 

@@ -25,7 +25,8 @@ public partial class Cell : UserControl
         Available,
         Origin,
         Path,
-        Destination
+        Destination,
+        Trace,
     }
 
     public enum CellKind

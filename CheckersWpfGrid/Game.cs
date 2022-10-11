@@ -1,40 +1,44 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Input;
 using CheckersWpfGrid.MoveStrategy;
 
 namespace CheckersWpfGrid;
 
 public sealed class Game
 {
-    public Game(Ruleset ruleset)
+    public Game(Ruleset ruleset, bool withBot = false)
     {
         Ruleset = ruleset;
         Table = CreateTable();
-        Players = CreatePlayers();
+        Players = CreatePlayers(withBot);
         Board = CreateBoard();
-        Highlighter = new Highlighter(this);
-        AvailableFigures = Ruleset.GetAvailableFigures(this);
-        Highlighter.HighlightFigures(AvailableFigures);
     }
 
     public Board Board { get; }
     public Table Table { get; }
     public List<Player> Players { get; }
-    private MoveSet? MoveSet { get; set; }
     public Ruleset Ruleset { get; }
     public List<Move> History { get; } = new();
-    private Highlighter Highlighter { get; }
-
-    private List<Figure> AvailableFigures { get; set; }
-
     public Move? LastMove => History.Count > 0 ? History[^1] : null;
 
-    private List<Player> CreatePlayers()
+    public Figure? SelectedFigure { get; private set; }
+
+    public Player CurrentPlayer => Ruleset.GetCurrentPlayer(this);
+    public MoveSet? AvailableMoves => SelectedFigure?.Strategy.GetMoves(SelectedFigure);
+
+    public List<Figure> AvailableFigures => CurrentPlayer.GetAvailableFigures();
+
+    public event Action<Move>? AfterMove;
+    public event Action<Figure>? AfterSelectFigure;
+
+    private List<Player> CreatePlayers(bool withBot = false)
     {
-        var first = new BlackPlayer(this);
-        var second = new WhitePlayer(this);
-        return new List<Player> { first, second };
+        return new List<Player>
+        {
+            new BlackPlayer(this),
+            withBot ? new UniversalWhiteBot(this) : new WhitePlayer(this)
+        };
     }
 
     private Table CreateTable()
@@ -45,7 +49,6 @@ public sealed class Game
         {
             var color = (c + r) % 2 == 1 ? Cell.CellKind.Black : Cell.CellKind.White;
             var cell = new Cell(this) { Kind = color, Row = r, Column = c };
-            cell.MouseDown += CellOnMouseDown;
             table[r, c] = cell;
         }
 
@@ -62,57 +65,43 @@ public sealed class Game
                 var figure = player.GetStartFigure(Table[r, c]);
                 if (figure == null)
                     continue;
-                figure.MouseDown += FigureOnMouseDown;
                 board[r, c] = figure;
             }
 
         return board;
     }
 
-    private void CellOnMouseDown(object sender, MouseButtonEventArgs e)
+    public bool CommitMove(Move? move)
     {
-        var cell = (Cell)sender;
-        SelectCell(cell);
-    }
-
-    private void FigureOnMouseDown(object sender, MouseButtonEventArgs e)
-    {
-        var figure = (Figure)sender;
-        SelectFigure(figure);
-    }
-
-    private bool SelectCell(Cell cell)
-    {
-        var move = MoveSet?.GetMoveByDestination(cell);
-        if (move == null) return false;
+        if (move == null || move.Figure.Player != CurrentPlayer) return false;
         move.Execute();
         History.Add(move);
-        MoveSet = null;
-        AvailableFigures = Ruleset.GetAvailableFigures(this);
-        Highlighter.ClearHighlighting().HighlightFigures(AvailableFigures);
+        SelectedFigure = null;
+        AfterMove?.Invoke(move);
         return true;
+    }
+
+    public bool MoveActiveFigureTo(Cell cell)
+    {
+        var move = AvailableMoves?.GetMoveByDestination(cell);
+        return CommitMove(move);
     }
 
     public bool SelectFigure(Figure? figure)
     {
-        Highlighter.ClearHighlighting().HighlightFigures(AvailableFigures);
         if (figure == null)
-            return true;
-        if (figure == MoveSet?.Figure)
         {
-            MoveSet = null;
+            SelectedFigure = null;
             return true;
         }
 
-        if (!Ruleset.CanSelectFigure(figure))
+        if (!CurrentPlayer.CanSelectFigure(figure))
             return false;
-        MoveSet = figure.Strategy.GetMoves(figure);
-        Highlighter.HighlightMoveSet(MoveSet);
+        
+        SelectedFigure = figure;
+        AfterSelectFigure?.Invoke(figure);
         return true;
     }
 
-    public List<Player> GetActivePlayers()
-    {
-        return Players.Where(player => player.CanMove()).ToList();
-    }
+    public Player? CheckWinner() => Ruleset.CheckWinner(this);
 }

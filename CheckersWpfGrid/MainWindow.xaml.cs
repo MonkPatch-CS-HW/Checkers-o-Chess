@@ -16,7 +16,7 @@ public partial class MainWindow : Window
     private void OnCreateButtonClick(object sender, RoutedEventArgs e)
     {
         var ruleset = new RussianChessRuleset();
-        var game = new Game(ruleset);
+        var game = new Game(ruleset, WithBot.IsChecked ?? false);
         var renderer = new Renderer(game);
         renderer.Show();
     }

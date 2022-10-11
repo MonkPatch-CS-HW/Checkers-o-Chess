@@ -2,25 +2,30 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Input;
 
 namespace CheckersWpfGrid;
 
 public partial class Renderer : Window
 {
+    protected Game Game { get; }
+    protected Highlighter Highlighter { get; }
+
     public Renderer(Game game)
     {
+        Game = game;
+        Highlighter = new Highlighter(Game);
         InitializeComponent();
-        Render(game);
-    }
 
-    public void Render(Game game)
-    {
-        Reset();
         FillRowsAndColumns();
         RenderTable(game.Table);
         BindTable(game.Table);
         RenderBoard(game.Board);
         BindFigures(game.Board);
+
+        Highlighter.HighlightGame();
+        Game.AfterSelectFigure += _ => Highlighter.HighlightGame();
+        Game.AfterMove += _ => Highlighter.HighlightGame();
     }
 
     private void RenderTable(Table table)
@@ -33,11 +38,6 @@ public partial class Renderer : Window
     {
         foreach (var figure in board.Figures.Where(figure => figure != null))
             Grid.Children.Add(figure!);
-    }
-
-    private void Reset()
-    {
-        Grid.Children.Clear();
     }
 
     private void FillRowsAndColumns()
@@ -58,7 +58,14 @@ public partial class Renderer : Window
             var bindRow = new Binding("Row") { RelativeSource = source };
             cell.SetBinding(Grid.ColumnProperty, bindColumn);
             cell.SetBinding(Grid.RowProperty, bindRow);
+            cell.MouseDown += CellOnMouseDown;
         }
+    }
+
+    private void CellOnMouseDown(object sender, MouseButtonEventArgs e)
+    {
+        if (!Game.CurrentPlayer.IsBot)
+            Game.MoveActiveFigureTo((Cell)sender);
     }
 
     private void BindFigures(Board board)
@@ -72,6 +79,13 @@ public partial class Renderer : Window
             var bindRow = new Binding("Row") { RelativeSource = source };
             figure.SetBinding(Grid.ColumnProperty, bindColumn);
             figure.SetBinding(Grid.RowProperty, bindRow);
+            figure.MouseDown += FigureOnMouseDown;
         }
+    }
+
+    private void FigureOnMouseDown(object sender, MouseButtonEventArgs e)
+    {
+        if (!Game.CurrentPlayer.IsBot)
+            Game.SelectFigure((Figure)sender);
     }
 }
