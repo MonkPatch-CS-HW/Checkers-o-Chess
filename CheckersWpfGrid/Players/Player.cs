@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using CheckersWpfGrid.MoveStrategy;
 
 namespace CheckersWpfGrid;
 
@@ -41,6 +42,9 @@ public abstract class Player
 
     public abstract bool CheckOppositeBorder(Cell cell);
     
+    public bool Surrendered { get; private set; }
+
+
     public bool CanSelectFigure(Figure figure)
     {
         if (figure.Game.LastMove != null && figure.Game.LastMove.EatenFigures.Count > 0 &&
@@ -54,8 +58,13 @@ public abstract class Player
         return Figures.Where(CanSelectFigure).ToList();
     }
 
+    public void Surrender()
+    {
+        Surrendered = true;
+    }
+
     public bool CanMove()
     {
-        return Figures.Any(figure => figure.CanMove());
+        return !Surrendered && Figures.Any(figure => figure.CanMove());
     }
 }

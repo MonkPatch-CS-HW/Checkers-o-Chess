@@ -8,7 +8,7 @@ namespace CheckersWpfGrid;
 
 public partial class Renderer : Window
 {
-    protected Game Game { get; }
+    public Game Game { get; }
     protected Highlighter Highlighter { get; }
 
     public Renderer(Game game)
@@ -26,6 +26,7 @@ public partial class Renderer : Window
         Highlighter.HighlightGame();
         Game.AfterSelectFigure += _ => Highlighter.HighlightGame();
         Game.AfterMove += _ => Highlighter.HighlightGame();
+        Game.AfterWin += winner => MessageBox.Show(winner.Name);
     }
 
     private void RenderTable(Table table)
@@ -87,5 +88,10 @@ public partial class Renderer : Window
     {
         if (!Game.CurrentPlayer.IsBot)
             Game.SelectFigure((Figure)sender);
+    }
+
+    private void OnSurrenderBtnClick(object sender, RoutedEventArgs e)
+    {
+        Game.Surrender(Game.CurrentPlayer);
     }
 }

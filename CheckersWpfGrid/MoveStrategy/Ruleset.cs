@@ -29,7 +29,9 @@ public abstract class Ruleset
         var activePlayers = GetActivePlayers(game);
         if (activePlayers.Count > 1)
             return null;
-        return activePlayers[0];
+        if (activePlayers.Count == 1)
+            return activePlayers[0];
+        return game.LastMove?.Figure.Player;
     }
 
     public Player GetCurrentPlayer(Game game)
@@ -38,7 +40,14 @@ public abstract class Ruleset
 
         if (game.LastMove.EatenFigures.Count > 0 && game.LastMove.Figure.CanEat()) return game.LastMove.Figure.Player;
 
-        var index = (game.Players.IndexOf(game.LastMove.Figure.Player) + 1) % game.Players.Count;
-        return game.Players[index];
+        var startIndex = (game.Players.IndexOf(game.LastMove.Figure.Player) + 1) % game.Players.Count;
+        for (var i = startIndex; i < startIndex + game.Players.Count; i++)
+        {
+            var player = game.Players[i % game.Players.Count];
+            if (player.CanMove())
+                return player;
+        }
+
+        return game.LastMove.Figure.Player;
     }
 }

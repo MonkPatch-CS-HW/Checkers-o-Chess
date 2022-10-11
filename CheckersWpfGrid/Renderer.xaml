@@ -5,10 +5,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:CheckersWpfGrid"
         mc:Ignorable="d"
-        Title="Renderer" Height="450" Width="800">
+        Title="Renderer" Height="697" Width="640">
     <Window.Resources>
         <ResourceDictionary Source="Themes/Default.xaml" />
     </Window.Resources>
-
-    <Grid x:Name="Grid" />
+    <StackPanel>
+        <Button x:Name="SurrenderBtn" Height="20" Click="OnSurrenderBtnClick">Surrender</Button>
+        <!-- <TextBlock Text="{Binding Path=Game.CurrentPlayer.Name, RelativeSource={RelativeSource AncestorType=local:Renderer}, StringFormat='Playing: {0}'}"></TextBlock> -->
+        <Grid x:Name="Grid" Width="640" Height="640" />
+    </StackPanel>
 </Window>

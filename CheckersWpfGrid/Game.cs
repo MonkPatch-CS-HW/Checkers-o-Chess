@@ -21,6 +21,7 @@ public sealed class Game
     public Ruleset Ruleset { get; }
     public List<Move> History { get; } = new();
     public Move? LastMove => History.Count > 0 ? History[^1] : null;
+    public Player? Winner { get; private set; }
 
     public Figure? SelectedFigure { get; private set; }
 
@@ -31,6 +32,7 @@ public sealed class Game
 
     public event Action<Move>? AfterMove;
     public event Action<Figure>? AfterSelectFigure;
+    public event Action<Player>? AfterWin;
 
     private List<Player> CreatePlayers(bool withBot = false)
     {
@@ -101,6 +103,15 @@ public sealed class Game
         SelectedFigure = figure;
         AfterSelectFigure?.Invoke(figure);
         return true;
+    }
+
+    public void Surrender(Player player)
+    {
+        player.Surrender();
+        var winner = CheckWinner();
+        if (winner == null) return;
+        Winner = winner;
+        AfterWin?.Invoke(winner);
     }
 
     public Player? CheckWinner() => Ruleset.CheckWinner(this);
