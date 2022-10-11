@@ -1,4 +1,4 @@
-﻿namespace CheckersWpfGrid.MoveStrategy.RussianChess.Miss;
+﻿namespace CheckersWpfGrid.MoveStrategy.RussianCheckers.Miss;
 
 public class MissStrategy : MoveStrategy
 {

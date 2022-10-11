@@ -43,7 +43,7 @@ public partial class Renderer : Window
 
     private void FillRowsAndColumns()
     {
-        for (var i = 0; i < 8; i++)
+        for (var i = 0; i < Game.Table.Size; i++)
         {
             Grid.ColumnDefinitions.Add(new ColumnDefinition());
             Grid.RowDefinitions.Add(new RowDefinition());

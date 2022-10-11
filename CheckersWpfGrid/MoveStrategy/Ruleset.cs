@@ -7,6 +7,10 @@ namespace CheckersWpfGrid.MoveStrategy;
 public abstract class Ruleset
 {
     private readonly Dictionary<string, MoveStrategy> _cache = new();
+    
+    public abstract string Name { get; }
+    
+    public abstract int DeckSize { get; }
 
     protected abstract MoveStrategy? CreateStrategy(string name);
 

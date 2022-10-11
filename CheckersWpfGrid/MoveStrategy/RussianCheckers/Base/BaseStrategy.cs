@@ -1,4 +1,4 @@
-﻿namespace CheckersWpfGrid.MoveStrategy.RussianChess.Base;
+﻿namespace CheckersWpfGrid.MoveStrategy.RussianCheckers.Base;
 
 public abstract class BaseStrategy : MoveStrategy
 {

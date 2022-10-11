@@ -5,26 +5,33 @@ namespace CheckersWpfGrid;
 
 public class Board
 {
-    public List<Figure?> Figures = new(new Figure?[64]);
+    public List<Figure?> Figures { get; }
+    public int Size { get; }
+
+    public Board(int size)
+    {
+        Size = size;
+        Figures = new List<Figure?>(new Figure?[size * size]);
+    }
 
     public Figure? this[int row, int column]
     {
         get
         {
-            if (row is (< 0 or >= 8) || column is (< 0 or >= 8))
+            if (row < 0 || row >= Size || column < 0 || column >= Size)
                 return null;
 
-            var cell = Figures[row * 8 + column];
+            var cell = Figures[row * Size + column];
             if (cell == null || cell.Active == false || cell.Column != column || cell.Row != row)
                 return null;
             return cell;
         }
         set
         {
-            if (row is (< 0 or >= 8) || column is (< 0 or >= 8))
+            if (row < 0 || row >= Size || column < 0 || column >= Size)
                 throw new IndexOutOfRangeException();
 
-            Figures[row * 8 + column] = value;
+            Figures[row * Size + column] = value;
         }
     }
 }

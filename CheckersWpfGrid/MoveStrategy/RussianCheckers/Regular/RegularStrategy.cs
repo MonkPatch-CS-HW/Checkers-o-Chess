@@ -1,4 +1,4 @@
-﻿namespace CheckersWpfGrid.MoveStrategy.RussianChess.Regular;
+﻿namespace CheckersWpfGrid.MoveStrategy.RussianCheckers.Regular;
 
 public class RegularStrategy : MoveStrategy
 {

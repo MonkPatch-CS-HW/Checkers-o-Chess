@@ -5,9 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CheckersWpfGrid"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="120" Width="320">
     <StackPanel>
-        <CheckBox x:Name="WithBot">With bot</CheckBox>
+        <CheckBox IsChecked="{Binding Path=WithBot, RelativeSource={RelativeSource AncestorType=local:MainWindow}}">With bot</CheckBox>
+        <ComboBox DisplayMemberPath="Name"
+                  SelectedValuePath="Name"
+                  ItemsSource="{Binding Path=RuleSets, RelativeSource={RelativeSource AncestorType=local:MainWindow}}"
+                  SelectedItem="{Binding Path=RuleSet, RelativeSource={RelativeSource AncestorType=local:MainWindow}, Mode=TwoWay}"
+                  />
         <Button Content="Create game" Click="OnCreateButtonClick" />
     </StackPanel>
 </Window>

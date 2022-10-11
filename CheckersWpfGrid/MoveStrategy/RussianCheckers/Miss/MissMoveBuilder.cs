@@ -1,6 +1,6 @@
-﻿using CheckersWpfGrid.MoveStrategy.RussianChess.Base;
+﻿using CheckersWpfGrid.MoveStrategy.RussianCheckers.Base;
 
-namespace CheckersWpfGrid.MoveStrategy.RussianChess.Miss;
+namespace CheckersWpfGrid.MoveStrategy.RussianCheckers.Miss;
 
 public class MissMoveBuilder : BaseMoveBuilder
 {

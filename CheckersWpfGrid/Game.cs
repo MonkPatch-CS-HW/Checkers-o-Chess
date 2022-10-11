@@ -45,9 +45,9 @@ public sealed class Game
 
     private Table CreateTable()
     {
-        var table = new Table();
-        for (var r = 0; r < 8; r++)
-        for (var c = 0; c < 8; c++)
+        var table = new Table(Ruleset.DeckSize);
+        for (var r = 0; r < table.Size; r++)
+        for (var c = 0; c < table.Size; c++)
         {
             var color = (c + r) % 2 == 1 ? Cell.CellKind.Black : Cell.CellKind.White;
             var cell = new Cell(this) { Kind = color, Row = r, Column = c };
@@ -59,9 +59,9 @@ public sealed class Game
 
     private Board CreateBoard()
     {
-        var board = new Board();
-        for (var r = 0; r < 8; r++)
-        for (var c = 0; c < 8; c++)
+        var board = new Board(Ruleset.DeckSize);
+        for (var r = 0; r < board.Size; r++)
+        for (var c = 0; c < board.Size; c++)
             foreach (var player in Players)
             {
                 var figure = player.GetStartFigure(Table[r, c]);
