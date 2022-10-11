@@ -14,6 +14,5 @@ public class RussianChessRuleset : Ruleset
             "Miss" => new MissStrategy(this),
             _ => null
         };
-        return null;
     }
 }
