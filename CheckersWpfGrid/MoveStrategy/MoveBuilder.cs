@@ -12,14 +12,14 @@ abstract public class MoveBuilder
     protected List<Cell> Cells { get; } = new List<Cell>();
     protected List<Figure> EatenFigures { get; } = new List<Figure>();
 
-    protected MoveStrategy? DestinationStrategy { get; private set; } = null;
+    protected Action<Figure>? ExecuteHandler;
+    protected Action<Figure>? UndoHandler;
     protected int GameHash { get; }
 
     protected MoveBuilder(Figure figure)
     {
         Figure = figure;
         StartCell = figure.Cell;
-        DestinationStrategy = figure.Strategy;
         GameHash = figure.Game.GetHashCode();
     }
 
@@ -47,6 +47,18 @@ abstract public class MoveBuilder
     
     public abstract bool CheckDestination(Cell cell);
 
+    public MoveBuilder AfterExecute(Action<Figure> executeHandler)
+    {
+        ExecuteHandler = executeHandler;
+        return this;
+    }
+
+    public MoveBuilder BeforeUndo(Action<Figure> undoHandler)
+    {
+        UndoHandler = undoHandler;
+        return this;
+    }
+
     public MoveBuilder To(Cell cell)
     {
         if (!CheckDestination(cell))
@@ -65,8 +77,6 @@ abstract public class MoveBuilder
     {
         for (int i = 0; i < Cells.Count; i++)
         {
-            if (Cells[i] == LastCell && Cells[i - 1].Figure != null)
-                return false;
             if (Cells[i] == LastCell && Cells[i].Figure != null)
                 return false;
             if (i > 0 && Cells[i].Figure != null && Cells[i - 1].Figure != null)
@@ -76,12 +86,6 @@ abstract public class MoveBuilder
         }
 
         return true;
-    }
-
-    public MoveBuilder Stratregy(MoveStrategy strategy)
-    {
-        DestinationStrategy = strategy;
-        return this;
     }
 
     public Move Build()
@@ -94,8 +98,9 @@ abstract public class MoveBuilder
         var move = new Move(Figure, LastCell)
         {
             EatenFigures = EatenFigures,
-            DestinationStrategy = DestinationStrategy ?? Figure.Strategy,
         };
+        move.OnExecute += ExecuteHandler;
+        move.OnUndo += UndoHandler;
         return move;
     }
 }

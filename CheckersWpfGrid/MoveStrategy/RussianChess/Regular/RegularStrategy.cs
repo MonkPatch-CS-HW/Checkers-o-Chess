@@ -17,10 +17,22 @@ public class RegularStrategy : MoveStrategy
         if (!builder.CheckDestination(cell))
             return null;
         if (figure.Player.CheckOppositeBorder(cell))
-            builder.Stratregy(Ruleset.GetStrategy("Miss"));
+        {
+            builder.AfterExecute(OnExecute).BeforeUndo(OnUndo);
+        }
         builder.To(cell);
         if (!builder.CheckAll())
             return null;
         return builder.Build();
+    }
+
+    protected void OnExecute(Figure figure)
+    {
+        figure.Strategy = Ruleset.GetStrategy("Miss");
+    }
+
+    protected void OnUndo(Figure figure)
+    {
+        figure.Strategy = Ruleset.GetStrategy("Original");
     }
 }

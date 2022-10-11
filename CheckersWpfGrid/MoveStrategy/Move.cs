@@ -12,8 +12,9 @@ public class Move
     public Cell Origin { get; init; }
     public Cell Destination { get; }
     public List<Figure> EatenFigures { get; init; } = new List<Figure>();
-    public MoveStrategy OriginStrategy { get; init; }
-    public MoveStrategy DestinationStrategy { get; init; }
+    
+    public event Action<Figure>? OnExecute;
+    public event Action<Figure>? OnUndo;
 
     public int OriginHash { get; }
     public int DestinationHash { get; private set; }
@@ -24,8 +25,6 @@ public class Move
         OriginHash = figure.Game.GetHashCode();
         Origin = figure.Cell;
         Destination = destination;
-        OriginStrategy = figure.Strategy;
-        DestinationStrategy = OriginStrategy;
     }
 
     public bool Eats => EatenFigures.Count > 0;
@@ -39,7 +38,7 @@ public class Move
         foreach (var figure in EatenFigures)
             figure.Active = false;
 
-        Figure.Strategy = DestinationStrategy;
+        OnExecute?.Invoke(Figure);
         DestinationHash = Figure.Game.GetHashCode();
     }
 
@@ -48,7 +47,7 @@ public class Move
         if (Figure.Game.GetHashCode() != DestinationHash)
             throw new Exception("Cannot undo move in incorrect game state");
         
-        Figure.Strategy = OriginStrategy;
+        OnUndo?.Invoke(Figure);
         foreach (var figure in EatenFigures)
             figure.Active = true;
 
