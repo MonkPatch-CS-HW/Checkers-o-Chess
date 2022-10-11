@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
-using CheckersWpfGrid.Strategy;
 
 namespace CheckersWpfGrid;
 
@@ -11,11 +11,12 @@ public partial class Figure : UserControl
 {
     public readonly Game Game;
 
-    public Figure(Game game)
+    public Figure(Game game, Player player)
     {
         InitializeComponent();
         Game = game;
-        Strategy = new RegularStrategy(this, Game);
+        Player = player;
+        Strategy = Game.Ruleset.GetStrategy("Regular");
     }
 
     public Cell Cell
@@ -25,7 +26,7 @@ public partial class Figure : UserControl
         {
             if (value.Figure != null)
                 return;
-            
+
             Row = value.Row;
             Column = value.Column;
             value.Figure = this;
@@ -55,16 +56,15 @@ public partial class Figure : UserControl
         typeof(Figure),
         new PropertyMetadata(true));
 
-    public MoveStrategy Strategy
+    public MoveStrategy.MoveStrategy Strategy
     {
-        get => (MoveStrategy)GetValue(StrategyProperty);
-        // TODO: Make readonly
+        get => (MoveStrategy.MoveStrategy)GetValue(StrategyProperty);
         set => SetValue(StrategyProperty, value);
     }
 
-    private static readonly DependencyProperty StrategyProperty = DependencyProperty.Register(
-        nameof(MoveStrategy),
-        typeof(MoveStrategy),
+    public static readonly DependencyProperty StrategyProperty = DependencyProperty.Register(
+        nameof(Strategy),
+        typeof(MoveStrategy.MoveStrategy),
         typeof(Figure));
 
     public int Column

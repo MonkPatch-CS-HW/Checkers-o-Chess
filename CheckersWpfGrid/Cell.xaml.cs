@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
@@ -8,6 +10,19 @@ using System.Windows.Media;
 
 namespace CheckersWpfGrid;
 
+public record Direction(int DirRow, int DirColumn)
+{
+    public int DirRow { get; } =
+        DirRow is >= -1 and <= 1
+            ? DirRow
+            : throw new Exception($"Incorrect {nameof(DirRow)} value in {nameof(Direction)}");
+
+    public int DirColumn { get; } =
+        DirColumn is >= -1 and <= 1
+            ? DirColumn
+            : throw new Exception($"Incorrect {nameof(DirColumn)} value in {nameof(Direction)}");
+}
+
 public partial class Cell : UserControl
 {
     public enum CellKind
@@ -15,13 +30,6 @@ public partial class Cell : UserControl
         White,
         Black,
     };
-
-    public enum CellPathState
-    {
-        None,
-        Through,
-        To,
-    }
 
     public readonly Game Game;
 
@@ -58,8 +66,9 @@ public partial class Cell : UserControl
         typeof(Cell),
         new PropertyMetadata());
 
-    public Cell? Relative(int distRow, int distColumn)
+    public Cell? Relative(Direction direction)
     {
+        var (distRow, distColumn) = direction;
         var (row, column) = (Row + distRow, Column + distColumn);
         if (!Game.Table.Contains(row, column))
             return null;
@@ -75,15 +84,26 @@ public partial class Cell : UserControl
         return -1;
     }
 
-    public CellPathState PathState
+    public Direction Direction(Cell other)
     {
-        get => (CellPathState)GetValue(PathStateProperty);
-        set => SetValue(PathStateProperty, value);
+        var distRow = other.Row - Row;
+        var distColumn = other.Column - Column;
+        if (Math.Abs(distRow) > Math.Abs(distColumn))
+            return new Direction(Math.Sign(distRow), 0);
+        if (Math.Abs(distRow) < Math.Abs(distColumn))
+            return new Direction(0, Math.Sign(distColumn));
+        return new Direction(Math.Sign(distRow), Math.Sign(distColumn));
     }
 
-    public static readonly DependencyProperty PathStateProperty = DependencyProperty.Register(
-        nameof(PathState),
-        typeof(CellPathState),
+    public bool Highlighted
+    {
+        get => (bool)GetValue(HighlightedProperty);
+        set => SetValue(HighlightedProperty, value);
+    }
+
+    public static readonly DependencyProperty HighlightedProperty = DependencyProperty.Register(
+        nameof(Highlighted),
+        typeof(bool),
         typeof(Cell),
-        new PropertyMetadata(CellPathState.None));
+        new PropertyMetadata(false));
 }

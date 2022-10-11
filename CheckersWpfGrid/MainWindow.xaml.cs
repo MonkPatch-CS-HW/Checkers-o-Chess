@@ -1,17 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+﻿using System.Windows;
+using CheckersWpfGrid.MoveStrategy.RussianChess;
 
 namespace CheckersWpfGrid
 {
@@ -20,12 +8,13 @@ namespace CheckersWpfGrid
     /// </summary>
     public partial class MainWindow : Window
     {
-        public Game Game;
+        public Game Game { get; }
 
         public MainWindow()
         {
             InitializeComponent();
-            Game = new Game();
+            var ruleset = new RussianChessRuleset();
+            Game = new Game(ruleset);
             Renderer.Render(Game);
         }
     }

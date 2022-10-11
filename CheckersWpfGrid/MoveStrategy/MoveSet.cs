@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace CheckersWpfGrid.Strategy;
+namespace CheckersWpfGrid.MoveStrategy;
 
 public class MoveSet : List<Move>
 {
@@ -20,11 +20,8 @@ public class MoveSet : List<Move>
         if (item.Figure != Figure)
             throw new Exception("Cannot add other figure's move");
 
-        if (this.Any((move) => move.To == item.To))
+        if (this.Any((move) => move.Destination == item.Destination))
             throw new Exception("Cannot add second move with the same destination");
-
-        if (item.GetEatNumber() < 0)
-            return;
         
         base.Add(item);
     }
@@ -44,7 +41,7 @@ public class MoveSet : List<Move>
     public Move? GetMoveByDestination(Cell cell)
     {
         foreach (var move in this)
-            if (move.To == cell)
+            if (move.Destination == cell)
                 return move;
         
         return null;
@@ -52,6 +49,6 @@ public class MoveSet : List<Move>
 
     public bool CanEat()
     {
-        return this.Any(move => move.GetEatNumber() > 0);
+        return this.Any(move => move.Eats);
     }
 }

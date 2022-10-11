@@ -2,7 +2,7 @@
 
 namespace CheckersWpfGrid;
 
-public class Player
+public abstract class Player
 {
     public enum PlayerKind
     {
@@ -10,10 +10,20 @@ public class Player
         Black
     }
 
-    public Player(PlayerKind kind)
+    protected Game Game { get; }
+    
+    protected Player(Game game)
     {
-        Kind = kind;
+        Game = game;
     }
     
-    public PlayerKind Kind { get; init; }
+    public abstract string Name { get; }
+    
+    public abstract PlayerKind Kind { get; }
+
+    public bool IsEnemy(Player player) => true;
+
+    public abstract Figure? GetStartFigure(Cell cell);
+
+    public abstract bool CheckOppositeBorder(Cell cell);
 }

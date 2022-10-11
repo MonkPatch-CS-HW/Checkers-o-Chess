@@ -4,7 +4,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using CheckersWpfGrid.Strategy;
+using CheckersWpfGrid.MoveStrategy;
+using CheckersWpfGrid.MoveStrategy.RussianChess.Miss;
 
 namespace CheckersWpfGrid;
 
@@ -15,10 +16,11 @@ public sealed class Game
     public readonly List<Player> Players;
     private readonly List<Cell> _selectedCells = new List<Cell>();
     private MoveSet? _moveSet;
-    private Figure? _selectedFigure; 
+    public Ruleset Ruleset;
 
-    public Game()
+    public Game(Ruleset ruleset)
     {
+        Ruleset = ruleset;
         Table = CreateTable();
         Players = CreatePlayers();
         Board = CreateBoard();
@@ -31,7 +33,7 @@ public sealed class Game
         {
             for (var c = 0; c < 8; c++)
             {
-                var color = (c + r) % 2 == 0 ? Cell.CellKind.Black : Cell.CellKind.White;
+                var color = (c + r) % 2 == 1 ? Cell.CellKind.Black : Cell.CellKind.White;
                 var cell = new Cell(this) { Kind = color, Row = r, Column = c };
                 cell.MouseDown += CellOnMouseDown;
                 table[r, c] = cell;
@@ -44,19 +46,17 @@ public sealed class Game
     private void CellOnMouseDown(object sender, MouseButtonEventArgs e)
     {
         var cell = (Cell)sender;
-        // _selectedFigure?.Move(cell.Row, cell.Column);
-        // ClearCellsSelection();
-        // SelectFigure(null);
-        var move = _moveSet.GetMoveByDestination(cell);
+        var move = _moveSet?.GetMoveByDestination(cell);
         if (move == null) return;
         move.Execute();
-        _moveSet.ClearHighlighting();
+        _moveSet?.ClearHighlighting();
+        _moveSet = null;
     }
 
     private List<Player> CreatePlayers()
     {
-        var first = new Player(Player.PlayerKind.Black);
-        var second = new Player(Player.PlayerKind.White);
+        var first = new BlackPlayer(this);
+        var second = new WhitePlayer(this);
         return new List<Player> { first, second };
     }
 
@@ -67,16 +67,14 @@ public sealed class Game
         {
             for (var c = 0; c < 8; c++)
             {
-                if ((c + r) % 2 != 0)
-                    continue;
-                if (r is > 2 and < 5)
-                    continue;
-
-                var playerIndex = r > 3 ? 1 : 0;
-                var player = Players[playerIndex];
-                var figure = new Figure(this) { Column = c, Row = r, Player = player };
-                figure.MouseDown += FigureOnMouseDown;
-                board[r, c] = figure;
+                foreach (var player in Players)
+                {
+                    var figure = player.GetStartFigure(Table[r, c]);
+                    if (figure == null)
+                        continue;
+                    figure.MouseDown += FigureOnMouseDown;
+                    board[r, c] = figure;
+                }
             }
         }
 
@@ -86,11 +84,7 @@ public sealed class Game
     private void FigureOnMouseDown(object sender, MouseButtonEventArgs e)
     {
         var figure = (Figure)sender;
-        // SelectFigure(figure);
-        _moveSet?.ClearHighlighting();
-        _moveSet = figure.Strategy.GetMoves();
-        // foreach (var move in moves)
-        _moveSet.HighlightCells();
+        SelectFigure(figure);
     }
 
     private void ClearCellsSelection()
@@ -117,18 +111,10 @@ public sealed class Game
 
     public bool SelectFigure(Figure? figure)
     {
-        // if (figure == _selectedFigure)
-        //     return SelectFigure(null);
-        //
-        // if (figure == null)
-        // {
-        //     _selectedFigure = null;
-        //     SelectCells(null);
-        //     return true;
-        // }
-        //
-        // _selectedFigure = figure;
-        // SelectCells(figure.Strategy.GetMoves());
+        _moveSet?.ClearHighlighting();
+        if (figure != null && figure != _moveSet?.Figure)
+            _moveSet = figure.Strategy.GetMoves(figure);
+        _moveSet?.HighlightCells();
         return true;
     }
 }
