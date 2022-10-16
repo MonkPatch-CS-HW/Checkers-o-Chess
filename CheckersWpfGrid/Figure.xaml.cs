@@ -39,12 +39,12 @@ public partial class Figure : UserControl
 
     public readonly Game Game;
 
-    public Figure(Game game, Player player)
+    public Figure(Game game, Player player, MoveStrategy.MoveStrategy strategy)
     {
         InitializeComponent();
         Game = game;
         Player = player;
-        Strategy = Game.Ruleset.GetStrategy("Regular");
+        Strategy = strategy;
     }
 
     public Cell Cell

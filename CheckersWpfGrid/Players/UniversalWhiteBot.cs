@@ -40,7 +40,7 @@ public class UniversalWhiteBot : Player
     {
         if (cell.Kind != Cell.CellKind.Black || cell.Row <= 4)
             return null;
-        return new Figure(Game, this)
+        return new Figure(Game, this, Game.Ruleset.GetStrategy("Regular"))
         {
             Row = cell.Row,
             Column = cell.Column
