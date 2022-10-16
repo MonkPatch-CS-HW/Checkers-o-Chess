@@ -17,4 +17,16 @@ public class RussianCheckersRuleset : Ruleset
             _ => null
         };
     }
+
+    protected override Player? GetCurrentPlayer(Game game)
+    {
+        var nextPlayer = base.GetCurrentPlayer(game);
+        if (nextPlayer == null)
+            return null;
+        if (game.LastMove != null && game.LastMove.EatenFigures.Count > 0 && game.LastMove.Figure.CanEat())
+            return game.LastMove.Figure.Player;
+        return nextPlayer;
+    }
+    
+    
 }

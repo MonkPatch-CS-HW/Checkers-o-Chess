@@ -47,10 +47,7 @@ public abstract class Player
 
     public bool CanSelectFigure(Figure figure)
     {
-        if (figure.Game.LastMove != null && figure.Game.LastMove.EatenFigures.Count > 0 &&
-            figure.Game.LastMove.Figure.CanEat())
-            return figure == figure.Game.LastMove.Figure;
-        return figure.Active && figure.Player == this && figure.CanMove();
+        return figure.Player == this && figure.CanMove();
     }
 
     public List<Figure> GetAvailableFigures()
@@ -61,6 +58,7 @@ public abstract class Player
     public void Surrender()
     {
         Surrendered = true;
+        Game.UpdateState();
     }
 
     public bool CanMove()

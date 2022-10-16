@@ -11,6 +11,7 @@
     </Window.Resources>
     <StackPanel>
         <Button Height="20" Click="OnSurrenderBtnClick">Surrender</Button>
+        <TextBlock Text="{Binding Path=Game.State.Message, RelativeSource={RelativeSource AncestorType=local:Renderer}}"></TextBlock>
         <Grid x:Name="Grid" Width="640" Height="640" />
     </StackPanel>
 </Window>

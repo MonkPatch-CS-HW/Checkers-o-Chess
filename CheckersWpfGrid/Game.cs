@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
 using CheckersWpfGrid.MoveStrategy;
 
 namespace CheckersWpfGrid;
 
-public sealed class Game
+public sealed class Game : DependencyObject
 {
     public Game(Ruleset ruleset, bool withBot = false)
     {
@@ -13,6 +14,7 @@ public sealed class Game
         Table = CreateTable();
         Players = CreatePlayers(withBot);
         Board = CreateBoard();
+        State = Ruleset.GetState(this);
     }
 
     public Board Board { get; }
@@ -21,18 +23,11 @@ public sealed class Game
     public Ruleset Ruleset { get; }
     public List<Move> History { get; } = new();
     public Move? LastMove => History.Count > 0 ? History[^1] : null;
-    public Player? Winner { get; private set; }
+    
+    public Player? CurrentPlayer => State.CurrentPlayer;
 
-    public Figure? SelectedFigure { get; private set; }
-
-    public Player CurrentPlayer => Ruleset.GetCurrentPlayer(this);
-    public MoveSet? AvailableMoves => SelectedFigure?.Strategy.GetMoves(SelectedFigure);
-
-    public List<Figure> AvailableFigures => CurrentPlayer.GetAvailableFigures();
 
     public event Action<Move>? AfterMove;
-    public event Action<Figure>? AfterSelectFigure;
-    public event Action<Player>? AfterWin;
 
     private List<Player> CreatePlayers(bool withBot = false)
     {
@@ -78,41 +73,24 @@ public sealed class Game
         if (move == null || move.Figure.Player != CurrentPlayer) return false;
         move.Execute();
         History.Add(move);
-        SelectedFigure = null;
+        UpdateState();
         AfterMove?.Invoke(move);
         return true;
     }
 
-    public bool MoveActiveFigureTo(Cell cell)
+    public void UpdateState()
     {
-        var move = AvailableMoves?.GetMoveByDestination(cell);
-        return CommitMove(move);
+        State = Ruleset.GetState(this);
     }
 
-    public bool SelectFigure(Figure? figure)
+    public GameState State
     {
-        if (figure == null)
-        {
-            SelectedFigure = null;
-            return true;
-        }
-
-        if (!CurrentPlayer.CanSelectFigure(figure))
-            return false;
-        
-        SelectedFigure = figure;
-        AfterSelectFigure?.Invoke(figure);
-        return true;
+        get => (GameState)GetValue(GameStateProperty);
+        set => SetValue(GameStateProperty, value);
     }
 
-    public void Surrender(Player player)
-    {
-        player.Surrender();
-        var winner = CheckWinner();
-        if (winner == null) return;
-        Winner = winner;
-        AfterWin?.Invoke(winner);
-    }
-
-    public Player? CheckWinner() => Ruleset.CheckWinner(this);
+    public static readonly DependencyProperty GameStateProperty = DependencyProperty.Register(
+        nameof(State),
+        typeof(GameState),
+        typeof(Game));
 }

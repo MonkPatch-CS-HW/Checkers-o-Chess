@@ -23,9 +23,11 @@ public class UniversalWhiteBot : Player
     private void MakeMove()
     {
         var moves = GetAvailableFigures().SelectMany(figure => figure.Strategy.GetMoves(figure)).ToList();
+        
         var eatingMoves = moves.Where(move => move.Eats).ToList();
-        var move = eatingMoves.Count > 0 ? eatingMoves[0] : moves[0];
-
+        var move = eatingMoves.Count > 0 ? eatingMoves[0] : moves.Count > 0 ? moves[0] : null;
+        if (move == null)
+            Surrender();
         Game.CommitMove(move);
     }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using CheckersWpfGrid.MoveStrategy.RussianCheckers.GameState;
 
 namespace CheckersWpfGrid.MoveStrategy;
 
@@ -22,13 +23,24 @@ public abstract class Ruleset
         _cache[name] = strategy ?? throw new Exception($"Strategy {name} does not exist");
         return _cache[name]!;
     }
+
+    public GameState GetState(Game game)
+    {
+        var currentPlayer = GetCurrentPlayer(game);
+        if (currentPlayer == null)
+        {
+            return new WinnerGameState(CheckWinner(game));
+        }
+
+        return new RegularGameState(currentPlayer);
+    }
     
-    public List<Player> GetActivePlayers(Game game)
+    protected List<Player> GetActivePlayers(Game game)
     {
         return game.Players.Where(player => player.CanMove()).ToList();
     }
-
-    public Player? CheckWinner(Game game)
+    
+    protected virtual Player? CheckWinner(Game game)
     {
         var activePlayers = GetActivePlayers(game);
         if (activePlayers.Count > 1)
@@ -38,20 +50,22 @@ public abstract class Ruleset
         return game.LastMove?.Figure.Player;
     }
 
-    public Player GetCurrentPlayer(Game game)
+    protected virtual Player? GetCurrentPlayer(Game game)
     {
-        if (game.LastMove == null) return game.Players[0];
+        if (game.LastMove == null)
+        {
+            if (game.Players[0].Surrendered)
+                return null;
+            return game.Players[0];
+        }
 
-        if (game.LastMove.EatenFigures.Count > 0 && game.LastMove.Figure.CanEat()) return game.LastMove.Figure.Player;
-
-        var startIndex = (game.Players.IndexOf(game.LastMove.Figure.Player) + 1) % game.Players.Count;
-        for (var i = startIndex; i < startIndex + game.Players.Count; i++)
+        var startIndex = game.Players.IndexOf(game.LastMove.Figure.Player) % game.Players.Count;
+        for (var i = startIndex + 1; i < startIndex + game.Players.Count; i++)
         {
             var player = game.Players[i % game.Players.Count];
             if (player.CanMove())
                 return player;
         }
-
-        return game.LastMove.Figure.Player;
+        return null;
     }
 }

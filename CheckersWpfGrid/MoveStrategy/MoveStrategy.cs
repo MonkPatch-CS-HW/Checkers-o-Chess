@@ -18,6 +18,10 @@ public abstract class MoveStrategy
     public MoveSet GetMoves(Figure figure)
     {
         var moveSet = new MoveSet(figure);
+        
+        if (figure.Active == false)
+            return moveSet;
+        
         foreach (var move in figure.Game.Table.Cells.Select(cell => GetMove(figure, cell)).Where(move => move != null))
             moveSet.Add(move);
 

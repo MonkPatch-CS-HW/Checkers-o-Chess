@@ -5,24 +5,11 @@ namespace CheckersWpfGrid;
 
 public class Highlighter
 {
-    public Highlighter(Game game)
+    public Highlighter()
     {
-        Game = game;
     }
 
     protected List<Cell> Highlighted { get; } = new();
-    protected Game Game { get; }
-
-    public Highlighter HighlightGame()
-    {
-        ClearHighlighting();
-        HighlightTrace(Game.LastMove);
-        if (Game.CurrentPlayer.IsBot)
-            return this;
-        HighlightFigures(Game.AvailableFigures);
-        HighlightMoves(Game.AvailableMoves);
-        return this;
-    }
 
     public Highlighter ClearHighlighting()
     {
