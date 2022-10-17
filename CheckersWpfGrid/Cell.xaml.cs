@@ -24,7 +24,6 @@ public partial class Cell : UserControl
         None,
         Available,
         Origin,
-        Path,
         Destination,
         Trace,
     }

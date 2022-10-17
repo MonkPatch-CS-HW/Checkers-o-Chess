@@ -13,7 +13,7 @@ public abstract class MoveStrategy
 
     public abstract string Name { get; }
 
-    public abstract Move? GetMove(Figure figure, Cell cell);
+    public abstract Move? GetMove(Figure figure, Cell destination);
 
     public MoveSet GetMoves(Figure figure)
     {

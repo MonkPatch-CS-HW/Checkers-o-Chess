@@ -43,24 +43,16 @@ public class Highlighter
             return this;
         
         var origin = new List<Cell>();
-        var path = new List<Cell>();
         var destination = new List<Cell>();
         foreach (var move in moveSet)
         {
             origin.Add(move.Origin);
-            foreach (var cell in move.Path) path.Add(cell);
             destination.Add(move.Destination);
         }
 
         foreach (var cell in origin)
         {
             cell.HighlightState = Cell.CellHighlightState.Origin;
-            Highlighted.Add(cell);
-        }
-
-        foreach (var cell in path)
-        {
-            cell.HighlightState = Cell.CellHighlightState.Path;
             Highlighted.Add(cell);
         }
 
@@ -80,12 +72,6 @@ public class Highlighter
         
         move.Origin.HighlightState = Cell.CellHighlightState.Trace;
         Highlighted.Add(move.Origin);
-        
-        foreach (var cell in move.Path)
-        {
-            cell.HighlightState = Cell.CellHighlightState.Trace;
-            Highlighted.Add(cell);
-        }
 
         move.Destination.HighlightState = Cell.CellHighlightState.Trace;
         Highlighted.Add(move.Destination);

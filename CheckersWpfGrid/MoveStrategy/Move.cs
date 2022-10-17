@@ -5,13 +5,12 @@ namespace CheckersWpfGrid.MoveStrategy;
 
 public class Move
 {
-    public Move(Figure figure, List<Cell> path)
+    public Move(Figure figure, Cell destination)
     {
         Figure = figure;
         OriginHash = figure.Game.GetHashCode();
         Origin = figure.Cell;
-        Destination = path[^1];
-        Path = path;
+        Destination = destination;
     }
 
     public Figure Figure { get; }
@@ -19,7 +18,6 @@ public class Move
     public Cell Origin { get; }
     public Cell Destination { get; }
     public List<Figure> EatenFigures { get; init; } = new();
-    public List<Cell> Path { get; }
 
     public int OriginHash { get; }
     public int DestinationHash { get; private set; }

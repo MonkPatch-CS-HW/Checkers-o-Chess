@@ -76,11 +76,9 @@ public partial class Renderer : Window
 
     private void CellOnMouseDown(object sender, MouseButtonEventArgs e)
     {
-        if (Game.CurrentPlayer is not { IsBot: true })
-        {
-            var move = AvailableMoves?.GetMoveByDestination((Cell)sender);
-            Game.CommitMove(move);
-        }
+        if (Game.CurrentPlayer is { IsBot: true }) return;
+        var move = AvailableMoves?.GetMoveByDestination((Cell)sender);
+        Game.CommitMove(move);
     }
 
     private void BindFigures(Board board)
@@ -100,14 +98,17 @@ public partial class Renderer : Window
 
     private void FigureOnMouseDown(object sender, MouseButtonEventArgs e)
     {
-        if (Game.CurrentPlayer != null && !Game.CurrentPlayer.IsBot && ((Figure)sender).Player == Game.CurrentPlayer)
+        if (Game.CurrentPlayer is not { IsBot: false } || ((Figure)sender).Player != Game.CurrentPlayer) return;
+        Highlighter.ClearHighlighting();
+        Highlighter.HighlightTrace(Game.LastMove);
+        Highlighter.HighlightFigures(AvailableFigures);
+        if ((Figure)sender == SelectedFigure)
         {
-            Highlighter.ClearHighlighting();
-            Highlighter.HighlightTrace(Game.LastMove);
-            Highlighter.HighlightFigures(AvailableFigures);
-            SelectedFigure = (Figure)sender;
-            Highlighter.HighlightMoves(AvailableMoves);
+            SelectedFigure = null;
+            return;
         }
+        SelectedFigure = (Figure)sender;
+        Highlighter.HighlightMoves(AvailableMoves);
     }
     
     

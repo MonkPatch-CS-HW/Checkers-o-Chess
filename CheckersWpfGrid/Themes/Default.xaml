@@ -19,9 +19,6 @@
             <Trigger Property="HighlightState" Value="Origin">
                 <Setter Property="Background" Value="DarkGray" />
             </Trigger>
-            <Trigger Property="HighlightState" Value="Path">
-                <Setter Property="Background" Value="DarkCyan" />
-            </Trigger>
             <Trigger Property="HighlightState" Value="Destination">
                 <Setter Property="Background" Value="DarkGreen" />
             </Trigger>
