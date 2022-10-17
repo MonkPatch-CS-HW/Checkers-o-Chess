@@ -1,4 +1,5 @@
 ﻿using CheckersWpfGrid.MoveStrategy.RussianCheckers.Strategy;
+using CheckersWpfGrid.Players;
 
 namespace CheckersWpfGrid.MoveStrategy.RussianCheckers;
 
@@ -26,6 +27,24 @@ public class RussianCheckersRuleset : Ruleset
             return game.LastMove.Figure.Player;
         return nextPlayer;
     }
-    
-    
+
+    public override bool CanSelectFigure(Player player, Figure figure)
+    {
+        if (player.Game.LastMove?.Figure.Player == player && player.Game.LastMove is { Eats: true } && player.Game.LastMove.Figure != figure)
+            return false;
+        return base.CanSelectFigure(player, figure);
+    }
+
+    public override Figure? GetStartFigure(Cell cell)
+    {
+        if ((cell.Row + cell.Column) % 2 == 0)
+            return null;
+
+        return cell.Row switch
+        {
+            <= 2 => cell.Game.Players[0].AddFigure(cell, "Regular"),
+            >= 5 => cell.Game.Players[1].AddFigure(cell, "Regular"),
+            _ => null
+        };
+    }
 }

@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using CheckersWpfGrid.MoveStrategy;
 
-namespace CheckersWpfGrid;
+namespace CheckersWpfGrid.Players;
 
 public abstract class Player
 {
@@ -17,8 +17,8 @@ public abstract class Player
         Game = game;
     }
 
-    protected Game Game { get; }
-    public List<Figure> Figures { get; } = new();
+    public Game Game { get; }
+    private List<Figure> Figures { get; } = new();
 
     public abstract string Name { get; }
     public virtual bool IsBot => false;
@@ -30,29 +30,24 @@ public abstract class Player
         return player != this;
     }
 
-    public Figure? GetStartFigure(Cell cell)
+    public virtual Figure? AddFigure(Cell cell, string strategy)
     {
-        var figure = CreateFigure(cell);
-        if (figure != null)
-            Figures.Add(figure);
+        var figure = new Figure(Game, this, Game.Ruleset.GetStrategy(strategy))
+        {
+            Row = cell.Row,
+            Column = cell.Column
+        };
+        Figures.Add(figure);
         return figure;
     }
 
-    protected abstract Figure? CreateFigure(Cell cell);
-
     public abstract bool CheckOppositeBorder(Cell cell);
-    
+
     public bool Surrendered { get; private set; }
-
-
-    public bool CanSelectFigure(Figure figure)
-    {
-        return figure.Player == this && figure.CanMove();
-    }
 
     public List<Figure> GetAvailableFigures()
     {
-        return Figures.Where(CanSelectFigure).ToList();
+        return Figures.Where(figure => Game.Ruleset.CanSelectFigure(this, figure)).ToList();
     }
 
     public void Surrender()

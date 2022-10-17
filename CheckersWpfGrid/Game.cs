@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using CheckersWpfGrid.MoveStrategy;
+using CheckersWpfGrid.Players;
 
 namespace CheckersWpfGrid;
 
@@ -23,7 +24,7 @@ public sealed class Game : DependencyObject
     public Ruleset Ruleset { get; }
     public List<Move> History { get; } = new();
     public Move? LastMove => History.Count > 0 ? History[^1] : null;
-    
+
     public Player? CurrentPlayer => State.CurrentPlayer;
 
 
@@ -57,13 +58,12 @@ public sealed class Game : DependencyObject
         var board = new Board(Ruleset.DeckSize);
         for (var r = 0; r < board.Size; r++)
         for (var c = 0; c < board.Size; c++)
-            foreach (var player in Players)
-            {
-                var figure = player.GetStartFigure(Table[r, c]);
-                if (figure == null)
-                    continue;
-                board[r, c] = figure;
-            }
+        {
+            var figure = Ruleset.GetStartFigure(Table[r, c]);
+            if (figure == null)
+                continue;
+            board[r, c] = figure;
+        }
 
         return board;
     }

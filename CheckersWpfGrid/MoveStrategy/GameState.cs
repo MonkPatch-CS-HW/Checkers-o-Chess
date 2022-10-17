@@ -1,4 +1,6 @@
-﻿namespace CheckersWpfGrid.MoveStrategy;
+﻿using CheckersWpfGrid.Players;
+
+namespace CheckersWpfGrid.MoveStrategy;
 
 public abstract class GameState
 {

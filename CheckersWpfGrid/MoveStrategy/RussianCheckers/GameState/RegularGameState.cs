@@ -1,4 +1,6 @@
-﻿namespace CheckersWpfGrid.MoveStrategy.RussianCheckers.GameState;
+﻿using CheckersWpfGrid.Players;
+
+namespace CheckersWpfGrid.MoveStrategy.RussianCheckers.GameState;
 
 public class RegularGameState : CheckersWpfGrid.MoveStrategy.GameState
 {

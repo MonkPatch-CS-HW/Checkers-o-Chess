@@ -21,10 +21,10 @@ public class Board
             if (row < 0 || row >= Size || column < 0 || column >= Size)
                 return null;
 
-            var cell = Figures[row * Size + column];
-            if (cell == null || cell.Active == false || cell.Column != column || cell.Row != row)
+            var figure = Figures[row * Size + column];
+            if (figure == null || figure.Active == false || figure.Column != column || figure.Row != row)
                 return null;
-            return cell;
+            return figure;
         }
         set
         {

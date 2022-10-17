@@ -79,6 +79,7 @@ public partial class Renderer : Window
         if (Game.CurrentPlayer is { IsBot: true }) return;
         var move = AvailableMoves?.GetMoveByDestination((Cell)sender);
         Game.CommitMove(move);
+        SelectedFigure = null;
     }
 
     private void BindFigures(Board board)

@@ -2,15 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using CheckersWpfGrid.MoveStrategy.RussianCheckers.GameState;
+using CheckersWpfGrid.Players;
 
 namespace CheckersWpfGrid.MoveStrategy;
 
 public abstract class Ruleset
 {
     private readonly Dictionary<string, MoveStrategy> _cache = new();
-    
+
     public abstract string Name { get; }
-    
+
     public abstract int DeckSize { get; }
 
     protected abstract MoveStrategy? CreateStrategy(string name);
@@ -34,12 +35,12 @@ public abstract class Ruleset
 
         return new RegularGameState(currentPlayer);
     }
-    
+
     protected List<Player> GetActivePlayers(Game game)
     {
         return game.Players.Where(player => player.CanMove()).ToList();
     }
-    
+
     protected virtual Player? CheckWinner(Game game)
     {
         var activePlayers = GetActivePlayers(game);
@@ -66,6 +67,14 @@ public abstract class Ruleset
             if (player.CanMove())
                 return player;
         }
+
         return null;
+    }
+
+    public abstract Figure? GetStartFigure(Cell cell);
+
+    public virtual bool CanSelectFigure(Player player, Figure figure)
+    {
+        return figure.Player == player && figure.CanMove();
     }
 }
