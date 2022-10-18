@@ -11,6 +11,7 @@ public class ChessRuleset : Ruleset
         {
             "Pawn" => new PawnStrategy(this),
             "Rook" => new RookStrategy(this),
+            "Bishop" => new BishopStrategy(this),
             _ => null
         };
     }
@@ -30,6 +31,8 @@ public class ChessRuleset : Ruleset
         {
             (0, 0 or 7) => cell.Game.Players[0].AddFigure(cell, "Rook"),
             (7, 0 or 7) => cell.Game.Players[1].AddFigure(cell, "Rook"),
+            (0, 2 or 5) => cell.Game.Players[0].AddFigure(cell, "Bishop"),
+            (7, 2 or 5) => cell.Game.Players[1].AddFigure(cell, "Bishop"),
             (1, _) => cell.Game.Players[0].AddFigure(cell, "Pawn"),
             (6, _) => cell.Game.Players[1].AddFigure(cell, "Pawn"),
             _ => null

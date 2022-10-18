@@ -79,6 +79,27 @@
                 </MultiDataTrigger.Conditions>
                 <Setter Property="Sprite" Value="{StaticResource RookWhite}" />
             </MultiDataTrigger>
+            
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition
+                        Binding="{Binding Path=Player.Kind, RelativeSource={RelativeSource Mode=Self}}"
+                        Value="Black" />
+                    <Condition Binding="{Binding Path=Strategy.Name, RelativeSource={RelativeSource Mode=Self}}"
+                               Value="Bishop" />
+                </MultiDataTrigger.Conditions>
+                <Setter Property="Sprite" Value="{StaticResource BishopBlack}" />
+            </MultiDataTrigger>
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition
+                        Binding="{Binding Path=Player.Kind, RelativeSource={RelativeSource Mode=Self}}"
+                        Value="White" />
+                    <Condition Binding="{Binding Path=Strategy.Name, RelativeSource={RelativeSource Mode=Self}}"
+                               Value="Bishop" />
+                </MultiDataTrigger.Conditions>
+                <Setter Property="Sprite" Value="{StaticResource BishopWhite}" />
+            </MultiDataTrigger>
         </Style.Triggers>
     </Style>
 </ResourceDictionary>
