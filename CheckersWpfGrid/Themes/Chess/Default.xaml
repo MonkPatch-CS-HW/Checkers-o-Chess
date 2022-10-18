@@ -121,6 +121,48 @@
                 </MultiDataTrigger.Conditions>
                 <Setter Property="Sprite" Value="{StaticResource KnightWhite}" />
             </MultiDataTrigger>
+            
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition
+                        Binding="{Binding Path=Player.Kind, RelativeSource={RelativeSource Mode=Self}}"
+                        Value="Black" />
+                    <Condition Binding="{Binding Path=Strategy.Name, RelativeSource={RelativeSource Mode=Self}}"
+                               Value="King" />
+                </MultiDataTrigger.Conditions>
+                <Setter Property="Sprite" Value="{StaticResource KingBlack}" />
+            </MultiDataTrigger>
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition
+                        Binding="{Binding Path=Player.Kind, RelativeSource={RelativeSource Mode=Self}}"
+                        Value="White" />
+                    <Condition Binding="{Binding Path=Strategy.Name, RelativeSource={RelativeSource Mode=Self}}"
+                               Value="King" />
+                </MultiDataTrigger.Conditions>
+                <Setter Property="Sprite" Value="{StaticResource KingWhite}" />
+            </MultiDataTrigger>
+            
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition
+                        Binding="{Binding Path=Player.Kind, RelativeSource={RelativeSource Mode=Self}}"
+                        Value="Black" />
+                    <Condition Binding="{Binding Path=Strategy.Name, RelativeSource={RelativeSource Mode=Self}}"
+                               Value="Queen" />
+                </MultiDataTrigger.Conditions>
+                <Setter Property="Sprite" Value="{StaticResource QueenBlack}" />
+            </MultiDataTrigger>
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition
+                        Binding="{Binding Path=Player.Kind, RelativeSource={RelativeSource Mode=Self}}"
+                        Value="White" />
+                    <Condition Binding="{Binding Path=Strategy.Name, RelativeSource={RelativeSource Mode=Self}}"
+                               Value="Queen" />
+                </MultiDataTrigger.Conditions>
+                <Setter Property="Sprite" Value="{StaticResource QueenWhite}" />
+            </MultiDataTrigger>
         </Style.Triggers>
     </Style>
 </ResourceDictionary>
