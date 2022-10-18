@@ -100,6 +100,27 @@
                 </MultiDataTrigger.Conditions>
                 <Setter Property="Sprite" Value="{StaticResource BishopWhite}" />
             </MultiDataTrigger>
+            
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition
+                        Binding="{Binding Path=Player.Kind, RelativeSource={RelativeSource Mode=Self}}"
+                        Value="Black" />
+                    <Condition Binding="{Binding Path=Strategy.Name, RelativeSource={RelativeSource Mode=Self}}"
+                               Value="Knight" />
+                </MultiDataTrigger.Conditions>
+                <Setter Property="Sprite" Value="{StaticResource KnightBlack}" />
+            </MultiDataTrigger>
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition
+                        Binding="{Binding Path=Player.Kind, RelativeSource={RelativeSource Mode=Self}}"
+                        Value="White" />
+                    <Condition Binding="{Binding Path=Strategy.Name, RelativeSource={RelativeSource Mode=Self}}"
+                               Value="Knight" />
+                </MultiDataTrigger.Conditions>
+                <Setter Property="Sprite" Value="{StaticResource KnightWhite}" />
+            </MultiDataTrigger>
         </Style.Triggers>
     </Style>
 </ResourceDictionary>
