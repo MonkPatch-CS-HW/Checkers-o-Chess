@@ -58,6 +58,27 @@
                 </MultiDataTrigger.Conditions>
                 <Setter Property="Sprite" Value="{StaticResource PawnWhite}" />
             </MultiDataTrigger>
+            
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition
+                        Binding="{Binding Path=Player.Kind, RelativeSource={RelativeSource Mode=Self}}"
+                        Value="Black" />
+                    <Condition Binding="{Binding Path=Strategy.Name, RelativeSource={RelativeSource Mode=Self}}"
+                               Value="Rook" />
+                </MultiDataTrigger.Conditions>
+                <Setter Property="Sprite" Value="{StaticResource RookBlack}" />
+            </MultiDataTrigger>
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition
+                        Binding="{Binding Path=Player.Kind, RelativeSource={RelativeSource Mode=Self}}"
+                        Value="White" />
+                    <Condition Binding="{Binding Path=Strategy.Name, RelativeSource={RelativeSource Mode=Self}}"
+                               Value="Rook" />
+                </MultiDataTrigger.Conditions>
+                <Setter Property="Sprite" Value="{StaticResource RookWhite}" />
+            </MultiDataTrigger>
         </Style.Triggers>
     </Style>
 </ResourceDictionary>

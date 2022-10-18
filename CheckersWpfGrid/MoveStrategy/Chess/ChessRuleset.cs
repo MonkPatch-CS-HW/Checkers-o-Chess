@@ -10,6 +10,7 @@ public class ChessRuleset : Ruleset
         return name switch
         {
             "Pawn" => new PawnStrategy(this),
+            "Rook" => new RookStrategy(this),
             _ => null
         };
     }
@@ -25,10 +26,12 @@ public class ChessRuleset : Ruleset
 
     public override Figure? GetStartFigure(Cell cell)
     {
-        return cell.Row switch
+        return (cell.Row, cell.Column) switch
         {
-            1 => cell.Game.Players[0].AddFigure(cell, "Pawn"),
-            6 => cell.Game.Players[1].AddFigure(cell, "Pawn"),
+            (0, 0 or 7) => cell.Game.Players[0].AddFigure(cell, "Rook"),
+            (7, 0 or 7) => cell.Game.Players[1].AddFigure(cell, "Rook"),
+            (1, _) => cell.Game.Players[0].AddFigure(cell, "Pawn"),
+            (6, _) => cell.Game.Players[1].AddFigure(cell, "Pawn"),
             _ => null
         };
     }
