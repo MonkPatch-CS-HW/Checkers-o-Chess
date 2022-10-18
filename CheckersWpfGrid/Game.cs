@@ -29,6 +29,7 @@ public sealed class Game : DependencyObject
 
 
     public event Action<Move>? AfterMove;
+    public event Action<GameState>? AfterStateUpdate;
 
     private List<Player> CreatePlayers(bool withBot = false)
     {
@@ -81,6 +82,7 @@ public sealed class Game : DependencyObject
     public void UpdateState()
     {
         State = Ruleset.GetState(this);
+        AfterStateUpdate?.Invoke(State);
     }
 
     public GameState State
@@ -93,4 +95,13 @@ public sealed class Game : DependencyObject
         nameof(State),
         typeof(GameState),
         typeof(Game));
+
+    public void UndoLastMove()
+    {
+        if (LastMove == null)
+            return;
+        LastMove.Undo();
+        History.Remove(LastMove);
+        UpdateState();
+    }
 }

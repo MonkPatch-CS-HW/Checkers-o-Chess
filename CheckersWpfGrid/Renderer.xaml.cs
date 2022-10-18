@@ -31,7 +31,7 @@ public partial class Renderer : Window
         RenderBoard(game.Board);
         BindFigures(game.Board);
 
-        game.AfterMove += GameOnAfterMove;
+        game.AfterStateUpdate += GameOnStateUpdate;
         Highlighter.HighlightFigures(AvailableFigures);
     }
 
@@ -44,7 +44,7 @@ public partial class Renderer : Window
         Application.Current.Resources.MergedDictionaries.Add(resourceDict);
     }
 
-    private void GameOnAfterMove(Move move)
+    private void GameOnStateUpdate(GameState state)
     {
         Highlighter.ClearHighlighting();
         Highlighter.HighlightTrace(Game.LastMove);
@@ -142,5 +142,10 @@ public partial class Renderer : Window
     {
         if (Game.CurrentPlayer is { IsBot: false })
             Game.CurrentPlayer.Surrender();
+    }
+
+    private void OnUndoBtnClick(object sender, RoutedEventArgs e)
+    {
+        Game.UndoLastMove();
     }
 }

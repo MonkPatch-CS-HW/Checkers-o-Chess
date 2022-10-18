@@ -5,9 +5,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:CheckersWpfGrid"
         mc:Ignorable="d"
-        Title="Renderer" Height="720" Width="653">
+        Title="Renderer" Height="750" Width="660">
     <StackPanel>
         <Button Height="20" Click="OnSurrenderBtnClick">Surrender</Button>
+        <Button Height="20" Click="OnUndoBtnClick">Undo</Button>
         <TextBlock Text="{Binding Path=Game.State.Message, RelativeSource={RelativeSource AncestorType=local:Renderer}}"></TextBlock>
         <Grid x:Name="Grid" Width="640" Height="640" />
     </StackPanel>
