@@ -107,38 +107,35 @@ public partial class Renderer : Window
 
     private void FigureOnMouseDown(object sender, MouseButtonEventArgs e)
     {
-        if (SelectedFigure != null && (Figure)sender != SelectedFigure)
-        {
+        if (!SelectFigure((Figure)sender))
             SelectCell(((Figure)sender).Cell);
-            return;
-        }
-
-        SelectFigure((Figure)sender);
     }
 
-    private void SelectCell(Cell cell)
+    private bool SelectCell(Cell cell)
     {
-        if (Game.CurrentPlayer is { IsBot: true }) return;
+        if (Game.CurrentPlayer is { IsBot: true }) return false;
         var move = AvailableMoves?.GetMoveByDestination(cell);
         Game.CommitMove(move);
         SelectedFigure = null;
+        return true;
     }
 
-    private void SelectFigure(Figure figure)
+    private bool SelectFigure(Figure figure)
     {
         if (Game.CurrentPlayer is not { IsBot: false } || AvailableFigures == null ||
-            !AvailableFigures.Contains(figure)) return;
+            !AvailableFigures.Contains(figure)) return false;
         Highlighter.ClearHighlighting();
         Highlighter.HighlightTrace(Game.LastMove);
         Highlighter.HighlightFigures(AvailableFigures);
         if (figure == SelectedFigure)
         {
             SelectedFigure = null;
-            return;
+            return true;
         }
 
         SelectedFigure = figure;
         Highlighter.HighlightMoves(AvailableMoves);
+        return true;
     }
 
     private void OnSurrenderBtnClick(object sender, RoutedEventArgs e)
