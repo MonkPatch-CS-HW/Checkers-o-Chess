@@ -126,10 +126,10 @@ public partial class Renderer : Window
             !AvailableFigures.Contains(figure)) return false;
         Highlighter.ClearHighlighting();
         Highlighter.HighlightTrace(Game.LastMove);
-        Highlighter.HighlightFigures(AvailableFigures);
         if (figure == SelectedFigure)
         {
             SelectedFigure = null;
+            Highlighter.HighlightFigures(AvailableFigures);
             return true;
         }
 

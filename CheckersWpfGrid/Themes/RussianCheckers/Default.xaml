@@ -9,22 +9,22 @@
     <Style TargetType="local:Cell">
         <Style.Triggers>
             <Trigger Property="Kind" Value="Black">
-                <Setter Property="Background" Value="Black" />
+                <Setter Property="Background" Value="#81A1C1" />
             </Trigger>
             <Trigger Property="Kind" Value="White">
                 <Setter Property="Background" Value="White" />
             </Trigger>
             <Trigger Property="HighlightState" Value="Available">
-                <Setter Property="Background" Value="Green" />
+                <Setter Property="Background" Value="#5E81AC" />
             </Trigger>
             <Trigger Property="HighlightState" Value="Origin">
-                <Setter Property="Background" Value="DarkGray" />
+                <Setter Property="Background" Value="#5E81AC" />
             </Trigger>
             <Trigger Property="HighlightState" Value="Destination">
-                <Setter Property="Background" Value="DarkGreen" />
+                <Setter Property="Background" Value="#5E81AC" />
             </Trigger>
             <Trigger Property="HighlightState" Value="Trace">
-                <Setter Property="Background" Value="Maroon" />
+                <Setter Property="Background" Value="#D8DEE9" />
             </Trigger>
         </Style.Triggers>
     </Style>
