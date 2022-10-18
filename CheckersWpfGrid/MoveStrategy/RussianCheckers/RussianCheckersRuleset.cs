@@ -1,4 +1,5 @@
-﻿using CheckersWpfGrid.MoveStrategy.RussianCheckers.Strategy;
+﻿using CheckersWpfGrid.MoveStrategy.Chess.GameState;
+using CheckersWpfGrid.MoveStrategy.RussianCheckers.Strategy;
 using CheckersWpfGrid.Players;
 
 namespace CheckersWpfGrid.MoveStrategy.RussianCheckers;
@@ -26,6 +27,17 @@ public class RussianCheckersRuleset : Ruleset
         if (game.LastMove != null && game.LastMove.EatenFigures.Count > 0 && game.LastMove.Figure.CanEat())
             return game.LastMove.Figure.Player;
         return nextPlayer;
+    }
+    
+    public override CheckersWpfGrid.MoveStrategy.GameState GetState(Game game)
+    {
+        var currentPlayer = GetCurrentPlayer(game);
+        if (currentPlayer == null)
+        {
+            return new WinnerGameState(CheckWinner(game));
+        }
+
+        return new RegularGameState(currentPlayer);
     }
 
     public override bool CanSelectFigure(Player player, Figure figure)

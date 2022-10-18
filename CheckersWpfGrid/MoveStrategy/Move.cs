@@ -32,9 +32,9 @@ public class Move
         if (Figure.Game.GetHashCode() != OriginHash)
             throw new Exception("Cannot make move in changed game");
 
-        Figure.Cell = Destination;
         foreach (var figure in EatenFigures)
             figure.Active = false;
+        Figure.Cell = Destination;
 
         OnExecute?.Invoke(Figure);
         DestinationHash = Figure.Game.GetHashCode();

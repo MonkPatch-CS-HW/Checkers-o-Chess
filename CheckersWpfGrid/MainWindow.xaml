@@ -12,7 +12,13 @@
                   SelectedValuePath="Name"
                   ItemsSource="{Binding Path=RuleSets, RelativeSource={RelativeSource AncestorType=local:MainWindow}}"
                   SelectedItem="{Binding Path=RuleSet, RelativeSource={RelativeSource AncestorType=local:MainWindow}, Mode=TwoWay}"
+                  SelectionChanged="UpdateStyles"
                   />
+        <ComboBox DisplayMemberPath="Name"
+                  SelectedValuePath="Name"
+                  ItemsSource="{Binding Path=AvailableStyles, RelativeSource={RelativeSource AncestorType=local:MainWindow}}"
+                  SelectedItem="{Binding Path=SelectedStyle, RelativeSource={RelativeSource AncestorType=local:MainWindow}, Mode=TwoWay}"
+        />
         <Button Content="Create game" Click="OnCreateButtonClick" />
     </StackPanel>
 </Window>

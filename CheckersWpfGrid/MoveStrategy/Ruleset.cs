@@ -25,16 +25,7 @@ public abstract class Ruleset
         return _cache[name]!;
     }
 
-    public GameState GetState(Game game)
-    {
-        var currentPlayer = GetCurrentPlayer(game);
-        if (currentPlayer == null)
-        {
-            return new WinnerGameState(CheckWinner(game));
-        }
-
-        return new RegularGameState(currentPlayer);
-    }
+    public abstract GameState GetState(Game game);
 
     protected List<Player> GetActivePlayers(Game game)
     {

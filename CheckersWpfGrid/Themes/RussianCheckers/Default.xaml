@@ -1,0 +1,65 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:CheckersWpfGrid">
+    <ImageBrush x:Key="FigureBlack" ImageSource="../../Images/FigureBlack.png" />
+    <ImageBrush x:Key="FigureWhite" ImageSource="../../Images/FigureWhite.png" />
+    <ImageBrush x:Key="FigureBlackMiss" ImageSource="../../Images/FigureBlackMiss.png" />
+    <ImageBrush x:Key="FigureWhiteMiss" ImageSource="../../Images/FigureWhiteMiss.png" />
+    
+    <Style TargetType="local:Cell">
+        <Style.Triggers>
+            <Trigger Property="Kind" Value="Black">
+                <Setter Property="Background" Value="Black" />
+            </Trigger>
+            <Trigger Property="Kind" Value="White">
+                <Setter Property="Background" Value="White" />
+            </Trigger>
+            <Trigger Property="HighlightState" Value="Available">
+                <Setter Property="Background" Value="Green" />
+            </Trigger>
+            <Trigger Property="HighlightState" Value="Origin">
+                <Setter Property="Background" Value="DarkGray" />
+            </Trigger>
+            <Trigger Property="HighlightState" Value="Destination">
+                <Setter Property="Background" Value="DarkGreen" />
+            </Trigger>
+            <Trigger Property="HighlightState" Value="Trace">
+                <Setter Property="Background" Value="Maroon" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    <Style TargetType="local:Figure">
+        <Style.Triggers>
+            <DataTrigger
+                Binding="{Binding Path=Player.Kind, RelativeSource={RelativeSource Mode=Self}}"
+                Value="Black">
+                <Setter Property="Sprite" Value="{StaticResource FigureBlack}" />
+            </DataTrigger>
+            <DataTrigger
+                Binding="{Binding Path=Player.Kind, RelativeSource={RelativeSource Mode=Self}}"
+                Value="White">
+                <Setter Property="Sprite" Value="{StaticResource FigureWhite}" />
+            </DataTrigger>
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition
+                        Binding="{Binding Path=Player.Kind, RelativeSource={RelativeSource Mode=Self}}"
+                        Value="Black" />
+                    <Condition Binding="{Binding Path=Strategy.Name, RelativeSource={RelativeSource Mode=Self}}"
+                               Value="Miss" />
+                </MultiDataTrigger.Conditions>
+                <Setter Property="Sprite" Value="{StaticResource FigureBlackMiss}" />
+            </MultiDataTrigger>
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition
+                        Binding="{Binding Path=Player.Kind, RelativeSource={RelativeSource Mode=Self}}"
+                        Value="White" />
+                    <Condition Binding="{Binding Path=Strategy.Name, RelativeSource={RelativeSource Mode=Self}}"
+                               Value="Miss" />
+                </MultiDataTrigger.Conditions>
+                <Setter Property="Sprite" Value="{StaticResource FigureWhiteMiss}" />
+            </MultiDataTrigger>
+        </Style.Triggers>
+    </Style>
+</ResourceDictionary>

@@ -1,10 +1,19 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:CheckersWpfGrid">
-    <ImageBrush x:Key="FigureBlack" ImageSource="../Images/FigureBlack.png" />
-    <ImageBrush x:Key="FigureWhite" ImageSource="../Images/FigureWhite.png" />
-    <ImageBrush x:Key="FigureBlackMiss" ImageSource="../Images/FigureBlackMiss.png" />
-    <ImageBrush x:Key="FigureWhiteMiss" ImageSource="../Images/FigureWhiteMiss.png" />
+    <ImageBrush x:Key="BishopBlack" ImageSource="../../Images/BishopBlack.png" />
+    <ImageBrush x:Key="BishopWhite" ImageSource="../../Images/BishopWhite.png" />
+    <ImageBrush x:Key="KingBlack" ImageSource="../../Images/KingBlack.png" />
+    <ImageBrush x:Key="KingWhite" ImageSource="../../Images/KingWhite.png" />
+    <ImageBrush x:Key="KnightBlack" ImageSource="../../Images/KnightBlack.png" />
+    <ImageBrush x:Key="KnightWhite" ImageSource="../../Images/KnightWhite.png" />
+    <ImageBrush x:Key="PawnBlack" ImageSource="../../Images/PawnBlack.png" />
+    <ImageBrush x:Key="PawnWhite" ImageSource="../../Images/PawnWhite.png" />
+    <ImageBrush x:Key="QueenBlack" ImageSource="../../Images/QueenBlack.png" />
+    <ImageBrush x:Key="QueenWhite" ImageSource="../../Images/QueenWhite.png" />
+    <ImageBrush x:Key="RookBlack" ImageSource="../../Images/RookBlack.png" />
+    <ImageBrush x:Key="RookWhite" ImageSource="../../Images/RookWhite.png" />
+    
     <Style TargetType="local:Cell">
         <Style.Triggers>
             <Trigger Property="Kind" Value="Black">
@@ -29,27 +38,15 @@
     </Style>
     <Style TargetType="local:Figure">
         <Style.Triggers>
-            <DataTrigger
-                Binding="{Binding Path=Player.Kind, RelativeSource={RelativeSource Mode=Self}}"
-                Value="Black">
-                <Setter Property="Sprite" Value="{StaticResource FigureBlack}" />
-            </DataTrigger>
-            <DataTrigger
-                Binding="{Binding Path=Player.Kind, RelativeSource={RelativeSource Mode=Self}}"
-                Value="White">
-                <Setter Property="Sprite" Value="{StaticResource FigureWhite}" />
-            </DataTrigger>
-
-
             <MultiDataTrigger>
                 <MultiDataTrigger.Conditions>
                     <Condition
                         Binding="{Binding Path=Player.Kind, RelativeSource={RelativeSource Mode=Self}}"
                         Value="Black" />
                     <Condition Binding="{Binding Path=Strategy.Name, RelativeSource={RelativeSource Mode=Self}}"
-                               Value="Miss" />
+                               Value="Pawn" />
                 </MultiDataTrigger.Conditions>
-                <Setter Property="Sprite" Value="{StaticResource FigureBlackMiss}" />
+                <Setter Property="Sprite" Value="{StaticResource PawnBlack}" />
             </MultiDataTrigger>
             <MultiDataTrigger>
                 <MultiDataTrigger.Conditions>
@@ -57,9 +54,9 @@
                         Binding="{Binding Path=Player.Kind, RelativeSource={RelativeSource Mode=Self}}"
                         Value="White" />
                     <Condition Binding="{Binding Path=Strategy.Name, RelativeSource={RelativeSource Mode=Self}}"
-                               Value="Miss" />
+                               Value="Pawn" />
                 </MultiDataTrigger.Conditions>
-                <Setter Property="Sprite" Value="{StaticResource FigureWhiteMiss}" />
+                <Setter Property="Sprite" Value="{StaticResource PawnWhite}" />
             </MultiDataTrigger>
         </Style.Triggers>
     </Style>

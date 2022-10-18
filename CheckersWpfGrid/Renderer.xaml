@@ -6,9 +6,6 @@
         xmlns:local="clr-namespace:CheckersWpfGrid"
         mc:Ignorable="d"
         Title="Renderer" Height="720" Width="653">
-    <Window.Resources>
-        <ResourceDictionary Source="Themes/Default.xaml" />
-    </Window.Resources>
     <StackPanel>
         <Button Height="20" Click="OnSurrenderBtnClick">Surrender</Button>
         <TextBlock Text="{Binding Path=Game.State.Message, RelativeSource={RelativeSource AncestorType=local:Renderer}}"></TextBlock>

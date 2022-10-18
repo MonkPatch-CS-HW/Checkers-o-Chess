@@ -99,6 +99,17 @@ public partial class Cell : UserControl
         return -1;
     }
 
+    public int StraightDist(Cell other)
+    {
+        var distRow = Math.Abs(other.Row - Row);
+        var distColumn = Math.Abs(other.Column - Column);
+        if (distRow == 0)
+            return distColumn;
+        if (distColumn == 0)
+            return distRow;
+        return -1;
+    }
+
     public Direction Direction(Cell other)
     {
         var distRow = other.Row - Row;

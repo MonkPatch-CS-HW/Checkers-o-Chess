@@ -53,7 +53,7 @@ public partial class Figure : UserControl
         get => Game.Table[Row, Column];
         set
         {
-            if (value.Figure != null)
+            if (value.Figure is { Active: true })
                 return;
 
             Row = value.Row;
