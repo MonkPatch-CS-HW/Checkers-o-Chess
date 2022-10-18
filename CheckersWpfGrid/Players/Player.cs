@@ -18,7 +18,7 @@ public abstract class Player
     }
 
     public Game Game { get; }
-    private List<Figure> Figures { get; } = new();
+    public List<Figure> Figures { get; } = new();
 
     public abstract string Name { get; }
     public virtual bool IsBot => false;

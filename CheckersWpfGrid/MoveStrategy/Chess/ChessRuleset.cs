@@ -1,5 +1,7 @@
-﻿using CheckersWpfGrid.MoveStrategy.Chess.GameState;
+﻿using System.Linq;
+using CheckersWpfGrid.MoveStrategy.Chess.GameState;
 using CheckersWpfGrid.MoveStrategy.Chess.Strategy;
+using CheckersWpfGrid.Players;
 
 namespace CheckersWpfGrid.MoveStrategy.Chess;
 
@@ -24,8 +26,47 @@ public class ChessRuleset : Ruleset
         var currentPlayer = GetCurrentPlayer(game);
         if (currentPlayer == null)
             return new WinnerGameState(CheckWinner(game));
+        var check = CheckCheck(game);
+        if (check != null)
+            return new CheckGameState(currentPlayer, check);
 
         return new RegularGameState(currentPlayer);
+    }
+
+    private Player? CheckCheck(Game game)
+    {
+        var figures = game.Board.Figures;
+        foreach (var figure in figures)
+        {
+            if (figure == null)
+                continue;
+
+            var move = figure.Strategy.GetMoves(figure)
+                .Find(move => move.EatenFigures.Any(eaten => eaten.Strategy.Name == "King"));
+            if (move == null) continue;
+            
+            var eatenFigure = move.EatenFigures.Find(eaten => eaten.Strategy.Name == "King");
+            return eatenFigure?.Player;
+        }
+
+        return null;
+    }
+
+    protected override Player? CheckWinner(Game game)
+    {
+        Player? winner = null;
+        bool hasWinner = false;
+        
+        foreach (var player in game.Players)
+        {
+            var king = player.Figures.Find(figure => figure.Strategy.Name == "King");
+            if (king != null)
+                winner = player;
+            if (king == null)
+                hasWinner = true;
+        }
+
+        return hasWinner ? winner : base.CheckWinner(game);
     }
 
     public override Figure? GetStartFigure(Cell cell)
