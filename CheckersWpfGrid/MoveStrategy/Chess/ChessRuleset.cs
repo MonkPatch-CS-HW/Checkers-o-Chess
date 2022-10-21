@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using CheckersWpfGrid.MoveStrategy.Chess.GameState;
 using CheckersWpfGrid.MoveStrategy.Chess.Strategy;
 using CheckersWpfGrid.Players;
@@ -23,6 +24,9 @@ public class ChessRuleset : Ruleset
 
     public override CheckersWpfGrid.MoveStrategy.GameState GetState(Game game)
     {
+        var kingMen = GetKingMen(game);
+        if (kingMen.Count == 1)
+            return new WinnerGameState(kingMen[0]);
         var currentPlayer = GetCurrentPlayer(game);
         if (currentPlayer == null)
             return new WinnerGameState(CheckWinner(game));
@@ -44,7 +48,7 @@ public class ChessRuleset : Ruleset
             var move = figure.Strategy.GetMoves(figure)
                 .Find(move => move.EatenFigures.Any(eaten => eaten.Strategy.Name == "King"));
             if (move == null) continue;
-            
+
             var eatenFigure = move.EatenFigures.Find(eaten => eaten.Strategy.Name == "King");
             return eatenFigure?.Player;
         }
@@ -52,21 +56,14 @@ public class ChessRuleset : Ruleset
         return null;
     }
 
-    protected override Player? CheckWinner(Game game)
+    private List<Player> GetKingMen(Game game)
     {
-        Player? winner = null;
-        bool hasWinner = false;
-        
-        foreach (var player in game.Players)
-        {
-            var king = player.Figures.Find(figure => figure.Strategy.Name == "King");
-            if (king != null)
-                winner = player;
-            if (king == null)
-                hasWinner = true;
-        }
-
-        return hasWinner ? winner : base.CheckWinner(game);
+        var winners = (from player in game.Players
+            let king = player.Figures.Find(figure => figure.Strategy.Name == "King")
+            let canKing = king is { Active: true }
+            where canKing
+            select player).ToList();
+        return winners;
     }
 
     public override bool ShouldEat => false;
