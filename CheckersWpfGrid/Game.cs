@@ -98,6 +98,8 @@ public sealed class Game : DependencyObject
 
     public void UndoLastMove()
     {
+        if (State.Kind == GameState.GameStateKind.Finish)
+            return;
         if (LastMove == null)
             return;
         LastMove.Undo();
