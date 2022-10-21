@@ -8,10 +8,10 @@ public class UniversalWhiteBot : Player
 {
     public UniversalWhiteBot(Game game) : base(game)
     {
-        Game.AfterMove += GameAfterMove;
+        Game.AfterStateUpdate += OnStateUpdate;
     }
 
-    private async void GameAfterMove(Move _)
+    private async void OnStateUpdate(GameState _)
     {
         if (Game.CurrentPlayer != this)
             return;
@@ -22,7 +22,7 @@ public class UniversalWhiteBot : Player
     private void MakeMove()
     {
         var moves = GetAvailableFigures().SelectMany(figure => figure.Strategy.GetMoves(figure)).ToList();
-        
+
         var eatingMoves = moves.Where(move => move.Eats).ToList();
         var move = eatingMoves.Count > 0 ? eatingMoves[0] : moves.Count > 0 ? moves[0] : null;
         if (move == null)

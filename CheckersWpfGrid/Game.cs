@@ -16,6 +16,7 @@ public sealed class Game : DependencyObject
         Players = CreatePlayers(withBot);
         Board = CreateBoard();
         State = Ruleset.GetState(this);
+        UpdateState();
     }
 
     public Board Board { get; }
