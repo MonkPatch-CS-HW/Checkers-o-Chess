@@ -23,7 +23,11 @@ public partial class MainWindow : Window
     public Dictionary<string, List<Style>> Styles { get; } = new()
     {
         ["Russian checkers"] =
-            new List<Style> { new("Default", "Themes/RussianCheckers/Default.xaml") },
+            new List<Style>
+            {
+                new("Default", "Themes/RussianCheckers/Default.xaml"),
+                new("Smooth", "Themes/RussianCheckers/Smooth.xaml")
+            },
         ["Chess"] = new List<Style> { new("Default", "Themes/Chess/Default.xaml") },
     };
 

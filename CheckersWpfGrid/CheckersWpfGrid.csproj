@@ -44,10 +44,23 @@
         <Resource Include="Images\RookBlack.png" />
         <None Remove="Images\RookWhite.png" />
         <Resource Include="Images\RookWhite.png" />
+        <None Remove="Images\FigureBlackMissSmooth.png" />
+        <Resource Include="Images\FigureBlackMissSmooth.png" />
+        <None Remove="Images\FigureBlackSmooth.png" />
+        <Resource Include="Images\FigureBlackSmooth.png" />
+        <None Remove="Images\FigureWhiteMissSmooth.png" />
+        <Resource Include="Images\FigureWhiteMissSmooth.png" />
+        <None Remove="Images\FigureWhiteSmooth.png" />
+        <Resource Include="Images\FigureWhiteSmooth.png" />
     </ItemGroup>
 
     <ItemGroup>
       <Page Update="Themes\RussianCheckers\Default.xaml">
+        <Generator>MSBuild:Compile</Generator>
+        <XamlRuntime>Wpf</XamlRuntime>
+        <SubType>Designer</SubType>
+      </Page>
+      <Page Update="Themes\RussianCheckers\Smooth.xaml">
         <Generator>MSBuild:Compile</Generator>
         <XamlRuntime>Wpf</XamlRuntime>
         <SubType>Designer</SubType>
