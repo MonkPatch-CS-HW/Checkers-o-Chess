@@ -1,6 +1,6 @@
 ﻿using CheckersWpfGrid.Players;
 
-namespace CheckersWpfGrid.MoveStrategy.Chess.GameState;
+namespace CheckersWpfGrid.MoveStrategy.Chess;
 
 public class CheckGameState : RegularGameState
 {

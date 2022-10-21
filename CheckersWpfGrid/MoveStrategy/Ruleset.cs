@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using CheckersWpfGrid.MoveStrategy.RussianCheckers.GameState;
 using CheckersWpfGrid.Players;
 
 namespace CheckersWpfGrid.MoveStrategy;
@@ -25,7 +24,14 @@ public abstract class Ruleset
         return _cache[name]!;
     }
 
-    public abstract GameState GetState(Game game);
+    public virtual GameState GetState(Game game)
+    {
+        var currentPlayer = GetCurrentPlayer(game);
+        if (currentPlayer == null)
+            return new WinnerGameState(CheckWinner(game));
+
+        return new RegularGameState(currentPlayer);
+    }
 
     private List<Player> GetActivePlayers(Game game)
     {

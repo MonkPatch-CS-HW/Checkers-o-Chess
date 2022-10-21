@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using CheckersWpfGrid.MoveStrategy.Chess.GameState;
 using CheckersWpfGrid.MoveStrategy.Chess.Strategy;
 using CheckersWpfGrid.Players;
 
@@ -22,16 +21,13 @@ public class ChessRuleset : Ruleset
         };
     }
 
-    public override CheckersWpfGrid.MoveStrategy.GameState GetState(Game game)
+    public override GameState GetState(Game game)
     {
-        var currentPlayer = GetCurrentPlayer(game);
-        if (currentPlayer == null)
-            return new WinnerGameState(CheckWinner(game));
+        var gameState = base.GetState(game);
         var check = CheckCheck(game);
-        if (check != null)
-            return new CheckGameState(currentPlayer, check);
-
-        return new RegularGameState(currentPlayer);
+        if (check != null && gameState.CurrentPlayer != null)
+            return new CheckGameState(gameState.CurrentPlayer, check);
+        return gameState;
     }
 
     private Player? CheckCheck(Game game)

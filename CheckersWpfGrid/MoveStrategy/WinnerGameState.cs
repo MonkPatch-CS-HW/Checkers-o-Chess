@@ -1,8 +1,8 @@
 ﻿using CheckersWpfGrid.Players;
 
-namespace CheckersWpfGrid.MoveStrategy.Chess.GameState;
+namespace CheckersWpfGrid.MoveStrategy;
 
-public class WinnerGameState : CheckersWpfGrid.MoveStrategy.GameState
+public class WinnerGameState : GameState
 {
     public WinnerGameState(Player? winner) : base()
     {

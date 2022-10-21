@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Documents;
 using CheckersWpfGrid.MoveStrategy;
 using CheckersWpfGrid.MoveStrategy.Chess;
+using CheckersWpfGrid.MoveStrategy.Corners;
 using CheckersWpfGrid.MoveStrategy.RussianCheckers;
 
 namespace CheckersWpfGrid;
@@ -14,10 +15,11 @@ namespace CheckersWpfGrid;
 /// </summary>
 public partial class MainWindow : Window
 {
-    public List<Ruleset> RuleSets { get; } = new List<Ruleset>()
+    public List<Ruleset> RuleSets { get; } = new()
     {
         new RussianCheckersRuleset(),
         new ChessRuleset(),
+        new CornersRuleset(),
     };
 
     public Dictionary<string, List<Style>> Styles { get; } = new()
@@ -29,6 +31,7 @@ public partial class MainWindow : Window
                 new("Smooth", "Themes/RussianCheckers/Smooth.xaml")
             },
         ["Chess"] = new List<Style> { new("Default", "Themes/Chess/Default.xaml") },
+        ["Corners"] = new List<Style>{ new ("Smooth", "Themes/Corners/Smooth.xaml") },
     };
 
     public List<Style> AvailableStyles

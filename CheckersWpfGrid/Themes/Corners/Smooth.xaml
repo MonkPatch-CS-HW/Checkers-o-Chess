@@ -1,0 +1,43 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:CheckersWpfGrid">
+    <ImageBrush x:Key="FigureBlack" ImageSource="../../Images/FigureBlackSmooth.png" />
+    <ImageBrush x:Key="FigureWhite" ImageSource="../../Images/FigureWhiteSmooth.png" />
+    
+    <Style TargetType="local:Cell">
+        <Style.Triggers>
+            <Trigger Property="Kind" Value="Black">
+                <Setter Property="Background" Value="#81A1C1" />
+            </Trigger>
+            <Trigger Property="Kind" Value="White">
+                <Setter Property="Background" Value="White" />
+            </Trigger>
+            <Trigger Property="HighlightState" Value="Available">
+                <Setter Property="Background" Value="#5E81AC" />
+            </Trigger>
+            <Trigger Property="HighlightState" Value="Origin">
+                <Setter Property="Background" Value="#5E81AC" />
+            </Trigger>
+            <Trigger Property="HighlightState" Value="Destination">
+                <Setter Property="Background" Value="#5E81AC" />
+            </Trigger>
+            <Trigger Property="HighlightState" Value="Trace">
+                <Setter Property="Background" Value="#D8DEE9" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    <Style TargetType="local:Figure">
+        <Style.Triggers>
+            <DataTrigger
+                Binding="{Binding Path=Player.Kind, RelativeSource={RelativeSource Mode=Self}}"
+                Value="Black">
+                <Setter Property="Sprite" Value="{StaticResource FigureBlack}" />
+            </DataTrigger>
+            <DataTrigger
+                Binding="{Binding Path=Player.Kind, RelativeSource={RelativeSource Mode=Self}}"
+                Value="White">
+                <Setter Property="Sprite" Value="{StaticResource FigureWhite}" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+</ResourceDictionary>
