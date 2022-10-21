@@ -5,20 +5,22 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CheckersWpfGrid"
         mc:Ignorable="d"
-        Title="MainWindow" Height="120" Width="320">
+        Title="MainWindow" Height="200" Width="360">
     <StackPanel>
         <CheckBox IsChecked="{Binding Path=WithBot, RelativeSource={RelativeSource AncestorType=local:MainWindow}}">With bot</CheckBox>
+        <Label Target="{Binding ElementName=RulesetSelector}">Ruleset</Label>
         <ComboBox DisplayMemberPath="Name"
                   SelectedValuePath="Name"
                   ItemsSource="{Binding Path=RuleSets, RelativeSource={RelativeSource AncestorType=local:MainWindow}}"
                   SelectedItem="{Binding Path=RuleSet, RelativeSource={RelativeSource AncestorType=local:MainWindow}, Mode=TwoWay}"
                   SelectionChanged="UpdateStyles"
-                  />
+                  x:Name="RulesetSelector" />
+        <Label Target="{Binding ElementName=StyleSelector}">Style</Label>
         <ComboBox DisplayMemberPath="Name"
                   SelectedValuePath="Name"
                   ItemsSource="{Binding Path=AvailableStyles, RelativeSource={RelativeSource AncestorType=local:MainWindow}}"
                   SelectedItem="{Binding Path=SelectedStyle, RelativeSource={RelativeSource AncestorType=local:MainWindow}, Mode=TwoWay}"
-        />
+                  x:Name="StyleSelector" />
         <Button Content="Create game" Click="OnCreateButtonClick" />
     </StackPanel>
 </Window>
