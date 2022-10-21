@@ -36,8 +36,8 @@ public sealed class Game : DependencyObject
     {
         return new List<Player>
         {
-            new BlackPlayer(this),
-            withBot ? new UniversalWhiteBot(this) : new WhitePlayer(this),
+            withBot ? new UniversalBlackBot(this) : new BlackPlayer(this),
+            new WhitePlayer(this),
         };
     }
 
