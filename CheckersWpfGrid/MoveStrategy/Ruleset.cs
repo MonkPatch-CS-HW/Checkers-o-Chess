@@ -42,17 +42,15 @@ public abstract class Ruleset
         return game.LastMove?.Figure.Player;
     }
 
+    protected virtual Player GetFirstPlayer(Game game) => game.Players[1];
+
     protected virtual Player? GetCurrentPlayer(Game game)
     {
-        if (game.LastMove == null)
-        {
-            if (game.Players[0].Surrendered)
-                return null;
-            return game.Players[0];
-        }
-
-        var startIndex = game.Players.IndexOf(game.LastMove.Figure.Player) % game.Players.Count;
-        for (var i = startIndex + 1; i < startIndex + game.Players.Count; i++)
+        var startIndex = game.LastMove == null
+            ? game.Players.IndexOf(GetFirstPlayer(game))
+            : game.Players.IndexOf(game.LastMove.Player) + 1;
+        
+        for (var i = startIndex; i < startIndex + game.Players.Count - 1; i++)
         {
             var player = game.Players[i % game.Players.Count];
             if (player.CanMove())
@@ -61,7 +59,7 @@ public abstract class Ruleset
 
         return null;
     }
-    
+
     public abstract bool ShouldEat { get; }
 
     public abstract Figure? GetStartFigure(Cell cell);

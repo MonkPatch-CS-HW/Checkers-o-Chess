@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using CheckersWpfGrid.Players;
 
 namespace CheckersWpfGrid.MoveStrategy;
 
@@ -14,6 +15,7 @@ public class Move
     }
 
     public Figure Figure { get; }
+    public Player Player => Figure.Player;
 
     public Cell Origin { get; }
     public Cell Destination { get; }
