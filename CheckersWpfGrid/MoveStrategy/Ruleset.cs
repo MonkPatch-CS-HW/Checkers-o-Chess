@@ -27,22 +27,25 @@ public abstract class Ruleset
 
     public abstract GameState GetState(Game game);
 
-    protected List<Player> GetActivePlayers(Game game)
+    private List<Player> GetActivePlayers(Game game)
     {
-        return game.Players.Where(player => player.CanMove()).ToList();
+        return game.Players.Where(IsActive).ToList();
     }
 
     protected virtual Player? CheckWinner(Game game)
     {
         var activePlayers = GetActivePlayers(game);
-        if (activePlayers.Count > 1)
-            return null;
-        if (activePlayers.Count == 1)
-            return activePlayers[0];
-        return game.LastMove?.Figure.Player;
+        return activePlayers.Count switch
+        {
+            > 1 => null,
+            1 => activePlayers[0],
+            _ => game.LastMove?.Figure.Player
+        };
     }
 
     protected virtual Player GetFirstPlayer(Game game) => game.Players[1];
+
+    protected virtual bool IsActive(Player player) => player.CanMove();
 
     protected virtual Player? GetCurrentPlayer(Game game)
     {
@@ -53,7 +56,7 @@ public abstract class Ruleset
         for (var i = startIndex; i < startIndex + game.Players.Count - 1; i++)
         {
             var player = game.Players[i % game.Players.Count];
-            if (player.CanMove())
+            if (IsActive(player))
                 return player;
         }
 

@@ -24,9 +24,6 @@ public class ChessRuleset : Ruleset
 
     public override CheckersWpfGrid.MoveStrategy.GameState GetState(Game game)
     {
-        var kingMen = GetKingMen(game);
-        if (kingMen.Count == 1)
-            return new WinnerGameState(kingMen[0]);
         var currentPlayer = GetCurrentPlayer(game);
         if (currentPlayer == null)
             return new WinnerGameState(CheckWinner(game));
@@ -56,14 +53,11 @@ public class ChessRuleset : Ruleset
         return null;
     }
 
-    private List<Player> GetKingMen(Game game)
+    protected override bool IsActive(Player player)
     {
-        var winners = (from player in game.Players
-            let king = player.Figures.Find(figure => figure.Strategy.Name == "King")
-            let canKing = king is { Active: true }
-            where canKing
-            select player).ToList();
-        return winners;
+        var king = player.Figures.Find(figure => figure.Strategy.Name == "King");
+        var canKing = king is { Active: true };
+        return canKing && base.IsActive(player);
     }
 
     public override bool ShouldEat => false;
