@@ -61,11 +61,17 @@ public abstract class Ruleset
 
         return null;
     }
+    
+    public abstract bool ShouldEat { get; }
 
     public abstract Figure? GetStartFigure(Cell cell);
 
     public virtual bool CanSelectFigure(Player player, Figure figure)
     {
-        return figure.Player == player && figure.CanMove();
+        if (figure.Player != player)
+            return false;
+        if (ShouldEat && player.Figures.Any(own => own.CanEat()))
+            return figure.CanEat();
+        return figure.CanMove();
     }
 }

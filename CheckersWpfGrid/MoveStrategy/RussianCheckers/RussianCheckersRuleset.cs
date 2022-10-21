@@ -28,7 +28,9 @@ public class RussianCheckersRuleset : Ruleset
             return game.LastMove.Figure.Player;
         return nextPlayer;
     }
-    
+
+    public override bool ShouldEat => true;
+
     public override CheckersWpfGrid.MoveStrategy.GameState GetState(Game game)
     {
         var currentPlayer = GetCurrentPlayer(game);

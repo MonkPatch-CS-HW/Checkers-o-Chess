@@ -69,6 +69,8 @@ public class ChessRuleset : Ruleset
         return hasWinner ? winner : base.CheckWinner(game);
     }
 
+    public override bool ShouldEat => false;
+
     public override Figure? GetStartFigure(Cell cell)
     {
         return (cell.Row, cell.Column) switch

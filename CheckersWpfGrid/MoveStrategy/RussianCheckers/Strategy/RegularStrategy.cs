@@ -19,7 +19,19 @@ public class RegularStrategy : BaseStrategy
             if (first?.Figure == null || !figure.Player.IsEnemy(first.Figure.Player))
                 return null;
         }
-        var move= base.GetMove(figure, destination);
+
+        if (figure.Cell.DiagonalDist(destination) == 1)
+        {
+            var dirRow = figure.Cell.Direction(destination).DirRow;
+            switch (dirRow)
+            {
+                case < 0 when figure.Player == figure.Game.Players[0]:
+                case > 0 when figure.Player == figure.Game.Players[1]:
+                    return null;
+            }
+        }
+        
+        var move = base.GetMove(figure, destination);
         if (move == null || !figure.Player.CheckOppositeBorder(destination)) return move;
         if (move.Figure.Strategy.Name == "Miss") return move;
         move.OnExecute += OnBorderExecute;
