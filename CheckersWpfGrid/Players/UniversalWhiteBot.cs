@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using CheckersWpfGrid.MoveStrategy;
 
@@ -22,11 +23,15 @@ public class UniversalWhiteBot : Player
     private void MakeMove()
     {
         var moves = GetAvailableFigures().SelectMany(figure => figure.Strategy.GetMoves(figure)).ToList();
-
         var eatingMoves = moves.Where(move => move.Eats).ToList();
-        var move = eatingMoves.Count > 0 ? eatingMoves[0] : moves.Count > 0 ? moves[0] : null;
-        if (move == null)
+        var resultMoves = eatingMoves.Count > 0 ? eatingMoves : moves;
+        if (resultMoves.Count == 0)
+        {
             Surrender();
+            return;
+        }
+        var rand = new Random((int)DateTimeOffset.Now.ToUnixTimeSeconds()).Next();
+        var move = resultMoves[rand % resultMoves.Count];
         Game.CommitMove(move);
     }
 
